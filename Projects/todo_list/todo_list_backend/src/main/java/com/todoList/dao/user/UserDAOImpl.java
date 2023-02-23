@@ -6,6 +6,8 @@ import jakarta.persistence.Query;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @AllArgsConstructor
 public class UserDAOImpl implements UserDAO {
@@ -22,6 +24,11 @@ public class UserDAOImpl implements UserDAO {
     public User getByEmail(String email) {
         Query theQuery = entityManager.createQuery("FROM User WHERE email=:userEmail")
                 .setParameter("userEmail", email);
-        return (User)theQuery.getSingleResult();
+
+        List<User> users = theQuery.getResultList();
+        if(!users.isEmpty()) {
+            return users.get(0);
+        }
+        return null;
     }
 }

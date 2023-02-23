@@ -62,6 +62,10 @@ public class AuthenticationFilter implements Filter {
 
         if(userEmail != null) {
             User user = this.userService.getByEmail(userEmail);
+            if(user == null) {
+                sendInvalidResponse(servletResponse);
+                return;
+            }
             if(jwtService.isTokenValid(jwt, user) && foundToken != null) {
                 filterChain.doFilter(servletRequest, servletResponse);
             } else {
