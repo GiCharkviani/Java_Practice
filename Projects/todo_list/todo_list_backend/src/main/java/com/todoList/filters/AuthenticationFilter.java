@@ -29,14 +29,18 @@ public class AuthenticationFilter implements Filter {
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-        if(!request.getRequestURI().contains("/auth/")) {
-            try {
-                checkAuth(request, response, filterChain);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
         } else {
-            filterChain.doFilter(servletRequest, servletResponse);
+            if(!request.getRequestURI().contains("/auth/")) {
+                try {
+                    checkAuth(request, response, filterChain);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                filterChain.doFilter(servletRequest, servletResponse);
+            }
         }
 
     }
