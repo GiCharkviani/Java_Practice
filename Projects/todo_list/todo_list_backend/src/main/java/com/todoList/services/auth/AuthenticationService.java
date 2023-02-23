@@ -8,7 +8,6 @@ import com.todoList.controllers.auth.helpers.RegisterRequest;
 import com.todoList.entities.Image;
 import com.todoList.entities.Token;
 import com.todoList.entities.User;
-import com.todoList.entities.enums.Role;
 import com.todoList.entities.enums.TokenType;
 import com.todoList.services.files.ImageService;
 import com.todoList.services.token.TokenService;
@@ -34,7 +33,6 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .image(uploadImage)
                 .password(request.getPassword())
-                .role(Role.USER)
                 .build();
 
         User savedUser = userService.save(user);

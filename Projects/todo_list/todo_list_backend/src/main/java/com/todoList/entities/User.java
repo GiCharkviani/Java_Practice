@@ -1,6 +1,5 @@
 package com.todoList.entities;
 
-import com.todoList.entities.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,9 +23,6 @@ public class User  {
     @Column(unique = true, nullable = false)
     private String email;
     private String password;
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private List<Todo> todos;
