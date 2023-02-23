@@ -1,42 +1,46 @@
 package com.todoList.services.auth;
 
+import com.todoList.AOP.Exceptions.ExceptionObjects.UserNotFoundException;
 import com.todoList.configuration.JwtService;
 import com.todoList.controllers.auth.helpers.AuthenticationRequest;
 import com.todoList.controllers.auth.helpers.AuthenticationResponse;
 import com.todoList.controllers.auth.helpers.RegisterRequest;
-import com.todoList.dao.token.TokenRepository;
-import com.todoList.dao.user.IUser;
+import com.todoList.entities.Image;
 import com.todoList.entities.Token;
 import com.todoList.entities.User;
 import com.todoList.entities.enums.Role;
 import com.todoList.entities.enums.TokenType;
+import com.todoList.services.files.ImageService;
+import com.todoList.services.token.TokenService;
+import com.todoList.services.user.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final IUser userRepository;
-    private final TokenRepository tokenRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final ImageService imageService;
+    private final TokenService tokenService;
     private final JwtService jwtService;
 
-    private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest request) {
-        var user = User.builder()
+    public AuthenticationResponse register(RegisterRequest request) throws Exception {
+        Image uploadImage = imageService.uploadImage(request.getImage());
+
+        User user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .image(uploadImage)
+                .password(request.getPassword())
                 .role(Role.USER)
                 .build();
 
-        var savedUser = userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
+        User savedUser = userService.save(user);
+
+        String jwtToken = jwtService.generateToken(user);
+
         saveUserToken(savedUser, jwtToken);
 
         return AuthenticationResponse
@@ -45,13 +49,15 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse login(AuthenticationRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+    public AuthenticationResponse login(AuthenticationRequest request) throws Exception {
+        User user = userService.getByEmail(request.getEmail());
 
-        revokeAllUserTokens(user);
+        if(user == null) {
+            throw new UserNotFoundException("User with email " + request.getEmail() + " was not found");
+        }
+
+        String jwtToken = jwtService.generateToken(user);
+
         saveUserToken(user, jwtToken);
 
         return AuthenticationResponse
@@ -61,25 +67,13 @@ public class AuthenticationService {
     }
 
     private void saveUserToken(User user, String jwtToken) {
-        var token = Token.builder()
+        Token token = Token.builder()
                 .user(user)
                 .token(jwtToken)
                 .tokenType(TokenType.BEARER)
                 .expired(false)
-                .revoked(false)
                 .build();
 
-        tokenRepository.save(token);
-    }
-
-    private void revokeAllUserTokens(User user) {
-        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
-        if (validUserTokens.isEmpty())
-            return;
-        validUserTokens.forEach(token -> {
-            token.setExpired(true);
-            token.setRevoked(true);
-        });
-        tokenRepository.saveAll(validUserTokens);
+        tokenService.save(token);
     }
 }

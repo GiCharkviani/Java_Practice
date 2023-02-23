@@ -1,22 +1,17 @@
 package com.todoList.controllers.todo;
 
 import com.todoList.entities.Todo;
-import com.todoList.services.todo.TodoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.todoList.services.todo.TodoServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/todo")
 public class TodoRestAPI {
 
-    private final TodoService todoService;
-
-    @Autowired
-    public TodoRestAPI(TodoService todoService) {
-        this.todoService = todoService;
-    }
+    private final TodoServiceImpl todoService;
 
     @GetMapping
     List<Todo> getTodos() {

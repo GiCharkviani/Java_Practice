@@ -1,0 +1,71 @@
+package com.todoList.filters;
+
+import com.todoList.configuration.JwtService;
+import com.todoList.entities.Token;
+import com.todoList.entities.User;
+import com.todoList.services.token.TokenService;
+import com.todoList.services.user.UserService;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+
+import java.io.IOException;
+
+@RequiredArgsConstructor
+public class AuthenticationFilter implements Filter {
+
+    private final JwtService jwtService;
+    private final UserService userService;
+    private final TokenService tokenService;
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+            throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
+
+        if(!request.getRequestURI().contains("/auth/")) {
+            try {
+                checkAuth(request, response, filterChain);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            filterChain.doFilter(servletRequest, servletResponse);
+        }
+
+    }
+
+    private void checkAuth(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain filterChain) throws Exception {
+        final String authHeader = servletRequest.getHeader("Authorization");
+        final String jwt;
+        final String userEmail;
+        final Token foundToken;
+
+        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+            sendInvalidResponse(servletResponse);
+            return;
+        }
+
+        jwt = authHeader.substring(7);
+        userEmail = jwtService.extractUserEmail(jwt);
+        System.out.println(userEmail);
+        foundToken = tokenService.findTokenByToken(jwt);
+
+        System.out.println(foundToken + "something");
+
+        if(userEmail != null) {
+            User user = this.userService.getByEmail(userEmail);
+            if(jwtService.isTokenValid(jwt, user) && foundToken != null) {
+                filterChain.doFilter(servletRequest, servletResponse);
+            } else {
+                sendInvalidResponse(servletResponse);
+            }
+        }
+    }
+
+    private void sendInvalidResponse(HttpServletResponse servletResponse) throws IOException {
+        servletResponse.sendError(403, "Unauthorized");
+    }
+}
