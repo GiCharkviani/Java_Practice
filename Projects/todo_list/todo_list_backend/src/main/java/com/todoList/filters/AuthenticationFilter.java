@@ -50,10 +50,7 @@ public class AuthenticationFilter implements Filter {
 
         jwt = authHeader.substring(7);
         userEmail = jwtService.extractUserEmail(jwt);
-        System.out.println(userEmail);
         foundToken = tokenService.findTokenByToken(jwt);
-
-        System.out.println(foundToken + "something");
 
         if(userEmail != null) {
             User user = this.userService.getByEmail(userEmail);
