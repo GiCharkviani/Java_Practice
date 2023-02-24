@@ -1,12 +1,14 @@
 package com.todoList.dao.todo;
 
 import com.todoList.entities.Todo;
+import com.todoList.entities.User;
 
 import java.util.List;
 
 public interface TodoDAO {
-    List<Todo> getAll();
-    Todo findById(long id);
-    void save(Todo todo_value);
-    void deleteById(long id);
+    List<Todo> getAll(User user);
+    Todo findById(int id, User user);
+    Todo save(Todo todo);
+    Todo update(int id, Todo todo);
+    void deleteById(long id, User user);
 }

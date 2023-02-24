@@ -2,39 +2,53 @@ package com.todoList.services.todo;
 
 import com.todoList.dao.todo.TodoDAOImpl;
 import com.todoList.entities.Todo;
+import com.todoList.entities.User;
+import com.todoList.services.user.UserService;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TodoServiceImpl implements TodoService {
 
     private final TodoDAOImpl todoDAO;
+    private final UserService userService;
+
 
     @Override
     @Transactional
-    public List<Todo> getAll() {
-        return todoDAO.getAll();
+    public List<Todo> getAll(String email) {
+        User user = userService.getByEmail(email);
+        return todoDAO.getAll(user);
     }
 
     @Override
     @Transactional
-    public Todo findById(long id) {
-        return todoDAO.findById(id);
+    public Todo findById(int id, String email) {
+        User user = userService.getByEmail(email);
+        return todoDAO.findById(id, user);
     }
 
     @Override
     @Transactional
-    public void save(Todo todo_value) {
-        todoDAO.save(todo_value);
+    public Todo save(Todo todo, String email) {
+        User user = userService.getByEmail(email);
+        todo.setUser(user);
+        return todoDAO.save(todo);
+    }
+
+    @Override
+    public Todo update(int id, Todo todo) {
+        return todoDAO.update(id, todo);
     }
 
     @Override
     @Transactional
-    public void deleteById(long id) {
-        todoDAO.deleteById(id);
+    public void deleteById(long id, String email) {
+        User user = userService.getByEmail(email);
+        todoDAO.deleteById(id, user);
     }
 }

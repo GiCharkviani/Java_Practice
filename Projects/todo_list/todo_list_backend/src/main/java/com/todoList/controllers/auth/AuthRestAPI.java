@@ -18,7 +18,7 @@ public class AuthRestAPI {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register (@ModelAttribute RegisterRequest  request) throws Exception {
+    public ResponseEntity<AuthenticationResponse> register (@ModelAttribute RegisterRequest request) throws Exception {
         try {
             return ResponseEntity.ok(authenticationService.register(request));
         } catch (DataIntegrityViolationException exception) {

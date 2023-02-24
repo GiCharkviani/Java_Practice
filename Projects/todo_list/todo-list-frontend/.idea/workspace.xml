@@ -2,7 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="294e46df-0784-401a-a1c5-79da7f471048" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.angular/cache/14.2.10/angular-webpack/99d79994f9a764ecd0263bd8252f9c32b0ff52ca/0.pack" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/14.2.10/angular-webpack/99d79994f9a764ecd0263bd8252f9c32b0ff52ca/0.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/14.2.10/angular-webpack/99d79994f9a764ecd0263bd8252f9c32b0ff52ca/1.pack" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/14.2.10/angular-webpack/99d79994f9a764ecd0263bd8252f9c32b0ff52ca/1.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/14.2.10/angular-webpack/99d79994f9a764ecd0263bd8252f9c32b0ff52ca/2.pack" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/14.2.10/angular-webpack/99d79994f9a764ecd0263bd8252f9c32b0ff52ca/2.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/14.2.10/angular-webpack/99d79994f9a764ecd0263bd8252f9c32b0ff52ca/5.pack" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/14.2.10/angular-webpack/99d79994f9a764ecd0263bd8252f9c32b0ff52ca/5.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/14.2.10/angular-webpack/99d79994f9a764ecd0263bd8252f9c32b0ff52ca/index.pack" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/14.2.10/angular-webpack/99d79994f9a764ecd0263bd8252f9c32b0ff52ca/index.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/14.2.10/angular-webpack/99d79994f9a764ecd0263bd8252f9c32b0ff52ca/index.pack.old" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/14.2.10/angular-webpack/99d79994f9a764ecd0263bd8252f9c32b0ff52ca/index.pack.old" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,6 +79,7 @@
       <workItem from="1676873561946" duration="16661000" />
       <workItem from="1677234296041" duration="1681000" />
       <workItem from="1677236029594" duration="548000" />
+      <workItem from="1677243896645" duration="1728000" />
     </task>
     <servers />
   </component>

@@ -13,6 +13,7 @@ import com.todoList.services.files.ImageService;
 import com.todoList.services.token.TokenService;
 import com.todoList.services.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +23,7 @@ public class AuthenticationService {
     private final ImageService imageService;
     private final TokenService tokenService;
     private final JwtService jwtService;
+    private final BCryptPasswordEncoder passwordEncoder;
 
 
     public AuthenticationResponse register(RegisterRequest request) throws Exception {
@@ -32,7 +34,7 @@ public class AuthenticationService {
                 .lastname(request.getLastname())
                 .email(request.getEmail())
                 .image(uploadImage)
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .build();
 
         User savedUser = userService.save(user);
@@ -52,6 +54,10 @@ public class AuthenticationService {
 
         if(user == null) {
             throw new UserNotFoundException("User with email " + request.getEmail() + " was not found");
+        }
+
+        if(!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new UserNotFoundException("User was not found");
         }
 
         String jwtToken = jwtService.generateToken(user);

@@ -5,8 +5,9 @@ import com.todoList.entities.Todo;
 import java.util.List;
 
 public interface TodoService {
-    List<Todo> getAll();
-    Todo findById(long id);
-    void save(Todo todo_value);
-    void deleteById(long id);
+    List<Todo> getAll(String email);
+    Todo findById(int id, String email);
+    Todo save(Todo todo, String email);
+    Todo update(int id, Todo todo);
+    void deleteById(long id, String email);
 }

@@ -1,6 +1,7 @@
 package com.todoList.dao.todo;
 
 import com.todoList.entities.Todo;
+import com.todoList.entities.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import lombok.AllArgsConstructor;
@@ -16,25 +17,49 @@ public class TodoDAOImpl implements TodoDAO {
 
 
     @Override
-    public List<Todo> getAll() {
-        Query theQuery = entityManager.createQuery("FROM Todo ORDER BY whenTodo desc");
+    public List<Todo> getAll(User user) {
+        Query theQuery = entityManager.createQuery("FROM Todo WHERE user=:user ORDER BY whenTodo DESC")
+                .setParameter("user", user);
         return theQuery.getResultList();
     }
 
     @Override
-    public Todo findById(long id) {
-        return entityManager.find(Todo.class, id);
+    public Todo findById(int id, User user) {
+        Query theQuery = entityManager.createQuery("FROM Todo WHERE user=:user ORDER BY whenTodo DESC")
+                .setParameter("user", user);
+        List<Todo> todos = theQuery.getResultList();
+
+        return todos.isEmpty() ? null : todos.get(0);
     }
 
     @Override
-    public void save(Todo todo_value) {
-        Todo dbTodo = entityManager.merge(todo_value);
+    public Todo save(Todo todo) {
+        Todo foundTodo = entityManager.find(Todo.class, todo.getId());
+        if (foundTodo != null) {
+            throw new RuntimeException();
+        }
+        return entityManager.merge(todo);
     }
 
     @Override
-    public void deleteById(long id) {
-        Query theQuery = entityManager.createQuery("delete from Todo where id=:todoId")
-                .setParameter("todoId", id);
+    public Todo update(int id, Todo todo) {
+        Todo tempTodo = findById(id, todo.getUser());
+        if(tempTodo == null) {
+            return null;
+        }
+        tempTodo.setWhatTodo(todo.getWhatTodo());
+        tempTodo.setWhenTodo(todo.getWhenTodo());
+
+        return entityManager.merge(tempTodo);
+    }
+
+
+    @Override
+    public void deleteById(long id, User user) {
+        Query theQuery = entityManager.createQuery("DELETE FROM Todo WHERE id=:todoId AND user=:user")
+                .setParameter("todoId", id)
+                .setParameter("user", user);
+
         theQuery.executeUpdate();
     }
 }

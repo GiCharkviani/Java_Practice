@@ -24,10 +24,10 @@ public class User  {
     private String email;
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Todo> todos;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Token> tokens;
 
     @OneToOne(cascade = CascadeType.ALL)
