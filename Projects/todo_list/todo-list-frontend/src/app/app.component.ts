@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {FormBuilder} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
+import {Observable, tap} from "rxjs";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
   title = 'todoList';
@@ -17,7 +18,10 @@ export class AppComponent {
     image: [],
   })
 
+  public imageHere = ''
+
   constructor(private readonly http: HttpClient, private readonly formBuilder: FormBuilder) {
+    this.userData()
   }
 
   public submit() {
@@ -30,5 +34,12 @@ export class AppComponent {
   onFileSelected(event: any) {
     console.log(event.target.files)
     this.myForm.get('image')?.setValue(event.target.files[0]);
+  }
+
+  public userData(): void {
+     this.http.get('http://localhost:8080/user').pipe(tap((data: any) => {
+       this.imageHere = data.image
+       console.log(data)
+     })).subscribe()
   }
 }
