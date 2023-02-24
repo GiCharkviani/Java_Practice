@@ -25,8 +25,10 @@ public class TodoDAOImpl implements TodoDAO {
 
     @Override
     public Todo findById(int id, User user) {
-        Query theQuery = entityManager.createQuery("FROM Todo WHERE user=:user ORDER BY whenTodo DESC")
-                .setParameter("user", user);
+        Query theQuery = entityManager.createQuery("FROM Todo WHERE user=:user AND id=:todoId")
+                .setParameter("user", user)
+                .setParameter("todoId", id);
+
         List<Todo> todos = theQuery.getResultList();
 
         return todos.isEmpty() ? null : todos.get(0);

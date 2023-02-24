@@ -28,12 +28,12 @@ public class TodoRestAPI {
     }
 
     @GetMapping("/{todoId}")
-    Todo getTodo(@PathVariable int todoId, @RequestHeader("Authorization") String authorizationHeader) {
+    ResponseEntity<?> getTodo(@PathVariable int todoId, @RequestHeader("Authorization") String authorizationHeader) {
         String userEmail = jwtService.extractUserEmail(authorizationHeader.substring(7));
         Todo tempTodo = todoService.findById(todoId, userEmail);
         if(tempTodo == null)
-            throw new RuntimeException("Todo id not found - " + todoId);
-        return tempTodo;
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(tempTodo);
     }
 
     @PostMapping
@@ -53,13 +53,13 @@ public class TodoRestAPI {
     }
 
     @DeleteMapping("/{todoId}")
-    Todo deleteTodo(@PathVariable int todoId, @RequestHeader("Authorization") String authorizationHeader) {
+    ResponseEntity<?> deleteTodo(@PathVariable int todoId, @RequestHeader("Authorization") String authorizationHeader) {
         String userEmail = jwtService.extractUserEmail(authorizationHeader.substring(7));
         Todo tempTodo = todoService.findById(todoId, userEmail);
         if(tempTodo == null)
-            throw new RuntimeException("Todo id not found - " + todoId);
+            return ResponseEntity.notFound().build();
         todoService.deleteById(todoId, userEmail);
-        return tempTodo;
+        return ResponseEntity.ok(tempTodo);
     }
 
     private User findUser(String authorizationHeader) throws Exception {
