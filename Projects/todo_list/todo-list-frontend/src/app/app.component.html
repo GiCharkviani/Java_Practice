@@ -1,0 +1,10 @@
+<form [formGroup]="myForm">
+    <input type="text" formControlName="firstname" autocomplete>
+    <input type="text" formControlName="lastname" autocomplete>
+    <input type="text" formControlName="email" autocomplete>
+    <input type="password" formControlName="password" autocomplete="current-password">
+    <input type="file" (change)="onFileSelected($event)" formControlName="image">
+    <br>
+    <hr>
+    <input type="submit" (click)="submit()" class="Register">
+</form>
