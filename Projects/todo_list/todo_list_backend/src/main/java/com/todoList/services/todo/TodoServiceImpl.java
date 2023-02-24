@@ -41,8 +41,10 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public Todo update(int id, Todo todo) {
-        return todoDAO.update(id, todo);
+    @Transactional
+    public Todo update(int id, Todo todo, String email) {
+        User user = userService.getByEmail(email);
+        return todoDAO.update(id, todo, user);
     }
 
     @Override

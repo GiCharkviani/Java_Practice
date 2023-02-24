@@ -9,6 +9,6 @@ public interface TodoDAO {
     List<Todo> getAll(User user);
     Todo findById(int id, User user);
     Todo save(Todo todo);
-    Todo update(int id, Todo todo);
+    Todo update(int id, Todo todo, User user);
     void deleteById(long id, User user);
 }

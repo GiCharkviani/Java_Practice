@@ -42,8 +42,8 @@ public class TodoDAOImpl implements TodoDAO {
     }
 
     @Override
-    public Todo update(int id, Todo todo) {
-        Todo tempTodo = findById(id, todo.getUser());
+    public Todo update(int id, Todo todo, User user) {
+        Todo tempTodo = findById(id, user);
         if(tempTodo == null) {
             return null;
         }

@@ -8,6 +8,6 @@ public interface TodoService {
     List<Todo> getAll(String email);
     Todo findById(int id, String email);
     Todo save(Todo todo, String email);
-    Todo update(int id, Todo todo);
+    Todo update(int id, Todo todo, String email);
     void deleteById(long id, String email);
 }

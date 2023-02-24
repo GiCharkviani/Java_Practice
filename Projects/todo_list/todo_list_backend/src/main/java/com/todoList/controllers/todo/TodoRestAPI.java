@@ -7,6 +7,8 @@ import com.todoList.entities.User;
 import com.todoList.services.todo.TodoService;
 import com.todoList.services.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,10 +42,14 @@ public class TodoRestAPI {
         return todoService.save(todo, userEmail);
     }
 
-    @PutMapping
-    public Todo updateTodo(@RequestBody Todo todo, @RequestHeader("Authorization") String authorizationHeader) throws Exception {
+    @PutMapping("/{todoId}")
+    public ResponseEntity<Todo> updateTodo(@RequestBody Todo todo, @PathVariable int todoId, @RequestHeader("Authorization") String authorizationHeader) {
         String userEmail = jwtService.extractUserEmail(authorizationHeader.substring(7));
-        return todoService.save(todo, userEmail);
+        Todo updatedTodo = todoService.update(todoId, todo, userEmail);
+        if(updatedTodo == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).build();
+        }
+        return ResponseEntity.ok(updatedTodo);
     }
 
     @DeleteMapping("/{todoId}")
