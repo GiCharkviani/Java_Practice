@@ -20,9 +20,9 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     @Transactional
-    public List<Todo> getAll(String email) {
+    public List<Todo> getAll(String email, int from, int to) {
         User user = userService.getByEmail(email);
-        return todoDAO.getAll(user);
+        return todoDAO.getAll(user, from, to);
     }
 
     @Override

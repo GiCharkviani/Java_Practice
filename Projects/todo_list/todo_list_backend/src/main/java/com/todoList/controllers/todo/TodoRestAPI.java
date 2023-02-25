@@ -1,11 +1,8 @@
 package com.todoList.controllers.todo;
 
-import com.todoList.AOP.Exceptions.ExceptionObjects.UserNotFoundException;
 import com.todoList.configuration.JwtService;
 import com.todoList.entities.Todo;
-import com.todoList.entities.User;
 import com.todoList.services.todo.TodoService;
-import com.todoList.services.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +15,16 @@ import java.util.List;
 public class TodoRestAPI {
 
     private final TodoService todoService;
-    private final UserService userService;
     private final JwtService jwtService;
 
     @GetMapping
-    List<Todo> getTodos(@RequestHeader("Authorization") String authorizationHeader) throws Exception {
+    List<Todo> getTodos(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestParam(value = "from", required = false, defaultValue = "1") int from,
+            @RequestParam(value = "to", required = false, defaultValue = "10") int to
+    ) {
         String userEmail = jwtService.extractUserEmail(authorizationHeader.substring(7));
-        return todoService.getAll(userEmail);
+        return todoService.getAll(userEmail, from, to);
     }
 
     @GetMapping("/{todoId}")
@@ -60,14 +60,5 @@ public class TodoRestAPI {
             return ResponseEntity.notFound().build();
         todoService.deleteById(todoId, userEmail);
         return ResponseEntity.ok(tempTodo);
-    }
-
-    private User findUser(String authorizationHeader) throws Exception {
-        String userEmail = jwtService.extractUserEmail(authorizationHeader.substring(7));
-        User user = userService.getByEmail(userEmail);
-        if(user == null) {
-            throw new UserNotFoundException("Not authorized user");
-        }
-        return user;
     }
 }

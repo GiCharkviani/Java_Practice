@@ -9,7 +9,7 @@ import com.todoList.entities.Image;
 import com.todoList.entities.Token;
 import com.todoList.entities.User;
 import com.todoList.entities.enums.TokenType;
-import com.todoList.services.files.ImageService;
+import com.todoList.services.image.ImageService;
 import com.todoList.services.token.TokenService;
 import com.todoList.services.user.UserService;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.todoList.services.files;
+package com.todoList.services.image;
 
 import com.todoList.entities.Image;
 import org.springframework.web.multipart.MultipartFile;

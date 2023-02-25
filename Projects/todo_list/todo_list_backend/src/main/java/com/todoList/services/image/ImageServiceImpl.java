@@ -1,6 +1,6 @@
-package com.todoList.services.files;
+package com.todoList.services.image;
 
-import com.todoList.dao.files.ImageDAO;
+import com.todoList.dao.image.ImageDAO;
 import com.todoList.entities.Image;
 import com.todoList.utils.ImageUtil;
 import jakarta.transaction.Transactional;

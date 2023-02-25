@@ -15,9 +15,6 @@ import java.io.IOException;
 
 /**
  * @TODO
- * 1. Fix all requests form front-end
- * 2. Send back User profile
- * 3. Send ToDos only to owner user
  * 4. Add status to Todos
  * 5. Handle all possible exceptions and send appoperate response
  * 6. Refactor code a bit

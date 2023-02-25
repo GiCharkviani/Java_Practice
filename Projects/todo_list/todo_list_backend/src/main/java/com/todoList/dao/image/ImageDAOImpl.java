@@ -1,4 +1,4 @@
-package com.todoList.dao.files;
+package com.todoList.dao.image;
 
 import com.todoList.entities.Image;
 import jakarta.persistence.EntityManager;
