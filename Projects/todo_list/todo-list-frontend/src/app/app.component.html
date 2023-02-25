@@ -11,3 +11,11 @@
 
 
 <img *ngIf="imageHere" [src]="'data:image/png;base64,' + imageHere" alt="">
+
+<ng-container *ngIf="todos$ | async as todos">
+    <div *ngFor="let todo of todos">
+        <h4>{{todo.id}}</h4>
+        <p>{{todo['whatTodo']}}</p>
+        <i>{{todo['whenTodo']}}</i>
+    </div>
+</ng-container>

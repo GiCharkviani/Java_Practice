@@ -10,6 +10,8 @@ import {Observable, tap} from "rxjs";
 })
 export class AppComponent {
   title = 'todoList';
+  todos$: Observable<any> = this.http.get('http://localhost:8080/api/todo');
+
   public myForm = this.formBuilder.group({
     firstname: [],
     lastname: [],
