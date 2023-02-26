@@ -10,7 +10,7 @@ import {Observable, tap} from "rxjs";
 })
 export class AppComponent {
   title = 'todoList';
-  todos$: Observable<any> = this.http.get('http://localhost:8080/api/todo');
+  todos$: Observable<any> = this.http.get('http://localhost:8080/api/todo').pipe(tap(data => console.log(data, 'TODOS')));
 
   public loginForm = this.formBuilder.group({
     email: [],
