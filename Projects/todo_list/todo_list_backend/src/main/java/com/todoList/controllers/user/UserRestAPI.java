@@ -1,6 +1,6 @@
 package com.todoList.controllers.user;
 
-import com.todoList.configuration.JwtService;
+import com.todoList.services.jwt.JwtService;
 import com.todoList.entities.User;
 import com.todoList.services.user.UserService;
 import com.todoList.utils.ImageUtil;

@@ -40,6 +40,16 @@ public class TokenDAOImpl implements TokenDAO {
 
     @Override
     public Token save(Token token) {
-        return this.entityManager.merge(token);
+        return entityManager.merge(token);
+    }
+
+    @Override
+    public void remove(String token) {
+        Token foundToken = findTokenByToken(token);
+        if(foundToken != null) {
+            Query removeQuery = entityManager.createQuery("DELETE FROM Token WHERE id =: removeId")
+                    .setParameter("removeId", foundToken.getId());
+            removeQuery.executeUpdate();
+        }
     }
 }

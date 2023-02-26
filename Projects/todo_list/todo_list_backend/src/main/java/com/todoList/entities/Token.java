@@ -23,8 +23,6 @@ public class Token {
     @Enumerated(EnumType.STRING)
     public TokenType tokenType = TokenType.BEARER;
 
-    public boolean expired;
-
     @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
     public User user;

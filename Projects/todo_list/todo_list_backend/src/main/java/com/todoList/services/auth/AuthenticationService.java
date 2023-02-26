@@ -1,7 +1,7 @@
 package com.todoList.services.auth;
 
 import com.todoList.AOP.Exceptions.ExceptionObjects.UserNotFoundException;
-import com.todoList.configuration.JwtService;
+import com.todoList.services.jwt.JwtService;
 import com.todoList.controllers.auth.helpers.AuthenticationRequest;
 import com.todoList.controllers.auth.helpers.AuthenticationResponse;
 import com.todoList.controllers.auth.helpers.RegisterRequest;
@@ -75,7 +75,6 @@ public class AuthenticationService {
                 .user(user)
                 .token(jwtToken)
                 .tokenType(TokenType.BEARER)
-                .expired(false)
                 .build();
 
         tokenService.save(token);

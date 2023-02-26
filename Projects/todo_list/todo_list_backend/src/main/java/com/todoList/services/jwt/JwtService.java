@@ -1,4 +1,4 @@
-package com.todoList.configuration;
+package com.todoList.services.jwt;
 
 import com.todoList.entities.User;
 import io.jsonwebtoken.Claims;

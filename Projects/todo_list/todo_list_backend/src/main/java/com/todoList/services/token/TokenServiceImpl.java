@@ -17,18 +17,24 @@ public class TokenServiceImpl implements TokenService {
     @Override
     @Transactional
     public List<Token> findAllValidTokenByUser(int userId) {
-        return this.tokenDAO.findAllValidTokenByUser(userId);
+        return tokenDAO.findAllValidTokenByUser(userId);
     }
 
     @Override
     @Transactional
     public Token findTokenByToken(String token) {
-        return this.tokenDAO.findTokenByToken(token);
+        return tokenDAO.findTokenByToken(token);
     }
 
     @Override
     @Transactional
     public Token save(Token token) {
-        return this.tokenDAO.save(token);
+        return tokenDAO.save(token);
+    }
+
+    @Override
+    @Transactional
+    public void remove(String token) {
+        tokenDAO.remove(token);
     }
 }

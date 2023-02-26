@@ -1,6 +1,6 @@
 package com.todoList.controllers.todo;
 
-import com.todoList.configuration.JwtService;
+import com.todoList.services.jwt.JwtService;
 import com.todoList.entities.Todo;
 import com.todoList.services.todo.TodoService;
 import lombok.RequiredArgsConstructor;

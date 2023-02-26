@@ -8,4 +8,5 @@ public interface TokenDAO {
     List<Token> findAllValidTokenByUser(int userId);
     Token findTokenByToken(String token);
     Token save(Token token);
+    void remove(String token);
 }
