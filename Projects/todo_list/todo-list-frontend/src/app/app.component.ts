@@ -37,14 +37,20 @@ export class AppComponent {
   }
 
   public login() {
-    this.http.post('http://localhost:8080/auth/login', this.loginForm.getRawValue()).subscribe(data => console.log(data, 'LOGGED IN'))
+    this.http.post('http://localhost:8080/auth/login', this.loginForm.getRawValue()).subscribe((data: any) => {
+      localStorage.setItem('authToken', JSON.stringify(data.token))
+      console.log(data, 'LOGGED IN')
+    })
   }
 
   public register() {
     const formData = new FormData();
     const entries = Object.entries(this.registerForm.getRawValue())
     entries.forEach(([key, value]: [string, any]) => formData.append(key, value || ''))
-    this.http.post('http://localhost:8080/auth/register', formData).subscribe((data) => console.log(data))
+    this.http.post('http://localhost:8080/auth/register', formData).subscribe((data: any) => {
+      localStorage.setItem('authToken', JSON.stringify(data.token))
+      console.log(data, 'REGISTERED')
+    })
   }
 
   public addTodo() {

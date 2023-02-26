@@ -27,7 +27,7 @@ import java.util.List;
  * 5. Handle all possible exceptions and send appoperate response
  * 6. Refactor code a bit
  * 7. Allow user to edit profile
- * 8. 
+ * 8.
  */
 
 @Configuration
