@@ -18,8 +18,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User save(User user) throws Exception {
+        User savedUser = userDAO.save(user);
         try {
-            return userDAO.save(user);
+            return savedUser;
         } catch (DataIntegrityViolationException exception) {
             throw new DuplicatedEmailException(user.getEmail());
         }
