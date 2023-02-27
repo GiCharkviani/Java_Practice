@@ -1,5 +1,6 @@
 package com.todoList.services.auth;
 
+import com.todoList.AOP.Exceptions.ExceptionObjects.DuplicatedEmailException;
 import com.todoList.AOP.Exceptions.ExceptionObjects.ImageUploadingException;
 import com.todoList.AOP.Exceptions.ExceptionObjects.UnauthorizedNotFoundException;
 import com.todoList.controllers.auth.helpers.AuthenticationRequest;
@@ -44,7 +45,11 @@ public class AuthenticationService {
                     .password(passwordEncoder.encode(request.getPassword()))
                     .build();
 
-            savedUser = userService.save(user);
+            try {
+                savedUser = userService.save(user);
+            } catch (Exception e) {
+                throw new DuplicatedEmailException(user.getEmail());
+            }
 
             jwtToken = jwtService.generateToken(user);
 

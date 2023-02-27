@@ -1,12 +1,10 @@
 package com.todoList.services.user;
 
-import com.todoList.AOP.Exceptions.ExceptionObjects.DuplicatedEmailException;
 import com.todoList.AOP.Exceptions.ExceptionObjects.UnauthorizedNotFoundException;
 import com.todoList.dao.user.UserDAO;
 import com.todoList.entities.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,12 +16,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User save(User user) throws Exception {
-        User savedUser = userDAO.save(user);
-        try {
-            return savedUser;
-        } catch (DataIntegrityViolationException exception) {
-            throw new DuplicatedEmailException(user.getEmail());
-        }
+        return userDAO.save(user);
     }
 
     @Override
