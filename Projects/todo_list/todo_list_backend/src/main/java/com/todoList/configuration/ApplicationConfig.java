@@ -24,12 +24,14 @@ import java.util.List;
 
 /**
  * @TODO
+ * 3. when deleting todo, new todos are not sent
  * 4. Add status to Todos
  * 5. Handle all possible exceptions and send appoperate response
  * 6. Refactor code a bit
  * 7. Allow user to edit profile
- * 8. add Swagger
- * 9. add email and other checks, that there is used right format
+ * 8. send image object instead of only image with user data
+ * 9. add Swagger
+ * 10. add email and other checks, that there is used right format
  */
 
 @Configuration
