@@ -38,7 +38,7 @@ public class AuthenticationService {
         User savedUser;
         try {
             ImageOnRegister image = request.getImage();
-            byte[] imageBytes = Base64.getDecoder().decode(image.getBase64Image());
+            byte[] imageBytes = Base64.getDecoder().decode(image.getBase64Image().split(",")[1]);
 
             uploadImage  = imageService.uploadImage(imageBytes, image.getName(), image.getType());
 
