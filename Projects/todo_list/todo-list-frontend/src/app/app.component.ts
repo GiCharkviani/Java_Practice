@@ -64,6 +64,7 @@ export class AppComponent {
 
   public deleteTodo(id: number) {
     this.http.delete('http://localhost:8080/api/todo/' + id).subscribe(data => {
+      localStorage.removeItem('authToken');
       console.log(data, 'DOTO DELETED')
     });
   }
