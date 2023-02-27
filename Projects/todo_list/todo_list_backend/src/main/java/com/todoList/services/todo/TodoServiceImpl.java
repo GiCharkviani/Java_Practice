@@ -6,6 +6,7 @@ import com.todoList.entities.User;
 import com.todoList.services.user.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,37 +21,36 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     @Transactional
-    public List<Todo> getAll(String email, int from, int to) {
-        User user = userService.getByEmail(email);
-        return todoDAO.getAll(user, from, to);
+    public List<Todo> getAll(int from, int to) {
+        return todoDAO.getAll(getAuthenticatedUser(), from, to);
     }
 
     @Override
     @Transactional
-    public Todo findById(int id, String email) {
-        User user = userService.getByEmail(email);
-        return todoDAO.findById(id, user);
+    public Todo findById(int id) {
+        return todoDAO.findById(id, getAuthenticatedUser());
     }
 
     @Override
     @Transactional
-    public Todo save(Todo todo, String email) {
-        User user = userService.getByEmail(email);
-        todo.setUser(user);
+    public Todo save(Todo todo) {
+        todo.setUser(getAuthenticatedUser());
         return todoDAO.save(todo);
     }
 
     @Override
     @Transactional
-    public Todo update(int id, Todo todo, String email) {
-        User user = userService.getByEmail(email);
-        return todoDAO.update(id, todo, user);
+    public Todo update(Todo todo) {
+        return todoDAO.update(todo, getAuthenticatedUser());
     }
 
     @Override
     @Transactional
-    public void deleteById(long id, String email) {
-        User user = userService.getByEmail(email);
-        todoDAO.deleteById(id, user);
+    public void deleteById(long id) {
+        todoDAO.deleteById(id, getAuthenticatedUser());
+    }
+
+    private User getAuthenticatedUser() {
+        return ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
 }

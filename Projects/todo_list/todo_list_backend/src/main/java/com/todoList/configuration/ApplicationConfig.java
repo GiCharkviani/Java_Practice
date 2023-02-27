@@ -1,5 +1,6 @@
 package com.todoList.configuration;
 
+import com.todoList.AOP.Exceptions.ExceptionObjects.UnauthorizedNotFoundException;
 import com.todoList.entities.User;
 import com.todoList.services.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ import java.util.List;
  * 5. Handle all possible exceptions and send appoperate response
  * 6. Refactor code a bit
  * 7. Allow user to edit profile
- * 8.
+ * 8. add Swagger
  */
 
 @Configuration
@@ -51,10 +52,14 @@ public class ApplicationConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return email -> {
-            User user = userService.getByEmail(email);
-            if(user == null) {
+            User user;
+
+            try {
+                user = userService.getByEmail(email);
+            } catch (UnauthorizedNotFoundException e) {
                 throw new UsernameNotFoundException("Invalid email or password");
             }
+
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), Collections.emptyList());
         };
     }

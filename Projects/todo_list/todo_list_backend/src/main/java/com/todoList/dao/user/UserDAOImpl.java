@@ -4,6 +4,7 @@ import com.todoList.entities.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class UserDAOImpl implements UserDAO {
 
 
     @Override
-    public User save(User user) {
+    public User save(User user) throws DataIntegrityViolationException {
         return entityManager.merge(user);
     }
 

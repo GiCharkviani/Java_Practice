@@ -26,8 +26,10 @@ export class AppComponent {
   })
 
   public todoForm = this.formBuilder.group({
+    id: [null],
     whatTodo: [],
-    whenTodo: []
+    whenTodo: [],
+    isCompleted: [true]
   })
 
   public imageHere = ''
@@ -57,6 +59,18 @@ export class AppComponent {
     this.http.post('http://localhost:8080/api/todo', this.todoForm.getRawValue()).subscribe(data => {
       this.todos$ = this.http.get('http://localhost:8080/api/todo')
       console.log(data, 'DOTO ADDED')
+    });
+  }
+
+  public deleteTodo(id: number) {
+    this.http.delete('http://localhost:8080/api/todo/' + id).subscribe(data => {
+      console.log(data, 'DOTO DELETED')
+    });
+  }
+
+  public editTodo(id: number) {
+    this.http.put('http://localhost:8080/api/todo', {id, whatTodo: 'Edited', whenTodo: new Date()}).subscribe(data => {
+      console.log(data, 'DOTO EDITED')
     });
   }
 

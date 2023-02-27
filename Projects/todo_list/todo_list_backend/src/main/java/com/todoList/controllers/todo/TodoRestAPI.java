@@ -19,33 +19,28 @@ public class TodoRestAPI {
 
     @GetMapping
     List<Todo> getTodos(
-            @RequestHeader("Authorization") String authorizationHeader,
             @RequestParam(value = "from", required = false, defaultValue = "1") int from,
             @RequestParam(value = "to", required = false, defaultValue = "10") int to
     ) {
-        String userEmail = jwtService.extractUserEmail(authorizationHeader.substring(7));
-        return todoService.getAll(userEmail, from, to);
+        return todoService.getAll(from, to);
     }
 
     @GetMapping("/{todoId}")
-    ResponseEntity<?> getTodo(@PathVariable int todoId, @RequestHeader("Authorization") String authorizationHeader) {
-        String userEmail = jwtService.extractUserEmail(authorizationHeader.substring(7));
-        Todo tempTodo = todoService.findById(todoId, userEmail);
+    ResponseEntity<?> getTodo(@PathVariable int todoId) {
+        Todo tempTodo = todoService.findById(todoId);
         if(tempTodo == null)
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok(tempTodo);
     }
 
     @PostMapping
-    public Todo saveTodo(@RequestBody Todo todo, @RequestHeader("Authorization") String authorizationHeader) throws Exception {
-        String userEmail = jwtService.extractUserEmail(authorizationHeader.substring(7));
-        return todoService.save(todo, userEmail);
+    public Todo saveTodo(@RequestBody Todo todo) throws Exception {
+        return todoService.save(todo);
     }
 
-    @PutMapping("/{todoId}")
-    public ResponseEntity<Todo> updateTodo(@RequestBody Todo todo, @PathVariable int todoId, @RequestHeader("Authorization") String authorizationHeader) {
-        String userEmail = jwtService.extractUserEmail(authorizationHeader.substring(7));
-        Todo updatedTodo = todoService.update(todoId, todo, userEmail);
+    @PutMapping
+    public ResponseEntity<Todo> updateTodo(@RequestBody Todo todo) {
+        Todo updatedTodo = todoService.update(todo);
         if(updatedTodo == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).build();
         }
@@ -53,12 +48,11 @@ public class TodoRestAPI {
     }
 
     @DeleteMapping("/{todoId}")
-    ResponseEntity<?> deleteTodo(@PathVariable int todoId, @RequestHeader("Authorization") String authorizationHeader) {
-        String userEmail = jwtService.extractUserEmail(authorizationHeader.substring(7));
-        Todo tempTodo = todoService.findById(todoId, userEmail);
+    ResponseEntity<?> deleteTodo(@PathVariable int todoId) {
+        Todo tempTodo = todoService.findById(todoId);
         if(tempTodo == null)
             return ResponseEntity.notFound().build();
-        todoService.deleteById(todoId, userEmail);
+        todoService.deleteById(todoId);
         return ResponseEntity.ok(tempTodo);
     }
 }

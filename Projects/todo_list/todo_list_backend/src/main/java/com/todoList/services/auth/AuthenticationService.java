@@ -1,7 +1,7 @@
 package com.todoList.services.auth;
 
-import com.todoList.AOP.Exceptions.ExceptionObjects.UserNotFoundException;
-import com.todoList.services.jwt.JwtService;
+import com.todoList.AOP.Exceptions.ExceptionObjects.ImageUploadingException;
+import com.todoList.AOP.Exceptions.ExceptionObjects.UnauthorizedNotFoundException;
 import com.todoList.controllers.auth.helpers.AuthenticationRequest;
 import com.todoList.controllers.auth.helpers.AuthenticationResponse;
 import com.todoList.controllers.auth.helpers.RegisterRequest;
@@ -10,11 +10,14 @@ import com.todoList.entities.Token;
 import com.todoList.entities.User;
 import com.todoList.entities.enums.TokenType;
 import com.todoList.services.image.ImageService;
+import com.todoList.services.jwt.JwtService;
 import com.todoList.services.token.TokenService;
 import com.todoList.services.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -27,21 +30,28 @@ public class AuthenticationService {
 
 
     public AuthenticationResponse register(RegisterRequest request) throws Exception {
-        Image uploadImage = imageService.uploadImage(request.getImage());
+        Image uploadImage;
+        String jwtToken;
+        User savedUser;
+        try {
+            uploadImage  = imageService.uploadImage(request.getImage());
 
-        User user = User.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .email(request.getEmail())
-                .image(uploadImage)
-                .password(passwordEncoder.encode(request.getPassword()))
-                .build();
+            User user = User.builder()
+                    .firstname(request.getFirstname())
+                    .lastname(request.getLastname())
+                    .email(request.getEmail())
+                    .image(uploadImage)
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .build();
 
-        User savedUser = userService.save(user);
+            savedUser = userService.save(user);
 
-        String jwtToken = jwtService.generateToken(user);
+            jwtToken = jwtService.generateToken(user);
 
-        saveUserToken(savedUser, jwtToken);
+            saveUserToken(savedUser, jwtToken);
+        } catch (IOException ioException) {
+            throw new ImageUploadingException("An image couldn't be processed. Please make sure that you are providing right value");
+        }
 
         return AuthenticationResponse
                 .builder()
@@ -52,12 +62,8 @@ public class AuthenticationService {
     public AuthenticationResponse login(AuthenticationRequest request) throws Exception {
         User user = userService.getByEmail(request.getEmail());
 
-        if(user == null) {
-            throw new UserNotFoundException("User with email " + request.getEmail() + " was not found");
-        }
-
         if(!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new UserNotFoundException("User was not found");
+            throw new UnauthorizedNotFoundException("User was not found");
         }
 
         String jwtToken = jwtService.generateToken(user);

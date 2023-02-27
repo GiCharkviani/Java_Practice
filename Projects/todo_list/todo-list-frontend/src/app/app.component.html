@@ -31,12 +31,14 @@
 <br>
 
 
-<img *ngIf="imageHere" [src]="'data:image/png;base64,' + imageHere" alt="">
+<img width="500" height="500" *ngIf="imageHere" [src]="'data:image/png;base64,' + imageHere" alt="">
 
 <ng-container *ngIf="todos$ | async as todos">
     <div *ngFor="let todo of todos">
         <h4>{{todo.id}}</h4>
         <p>{{todo['whatTodo']}}</p>
         <i>{{todo['whenTodo']}}</i>
+        <button (click)="deleteTodo(todo.id)">Delete</button>
+        <button (click)="editTodo(todo.id)">Edit</button>
     </div>
 </ng-container>

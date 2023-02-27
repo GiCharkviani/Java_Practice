@@ -1,12 +1,12 @@
 package com.todoList.services.token;
 
+import com.todoList.AOP.Exceptions.ExceptionObjects.UnauthorizedNotFoundException;
 import com.todoList.dao.token.TokenDAO;
 import com.todoList.entities.Token;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -16,14 +16,12 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     @Transactional
-    public List<Token> findAllValidTokenByUser(int userId) {
-        return tokenDAO.findAllValidTokenByUser(userId);
-    }
-
-    @Override
-    @Transactional
-    public Token findTokenByToken(String token) {
-        return tokenDAO.findTokenByToken(token);
+    public Token findTokenByToken(String token) throws UnauthorizedNotFoundException {
+        try {
+            return tokenDAO.findTokenByToken(token);
+        } catch (InvalidDataAccessResourceUsageException exception) {
+            throw new UnauthorizedNotFoundException();
+        }
     }
 
     @Override

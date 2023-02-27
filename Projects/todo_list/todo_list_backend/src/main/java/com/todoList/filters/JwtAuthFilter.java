@@ -1,5 +1,6 @@
 package com.todoList.filters;
 
+import com.todoList.AOP.Exceptions.ExceptionObjects.UnauthorizedNotFoundException;
 import com.todoList.entities.Token;
 import com.todoList.entities.User;
 import com.todoList.services.jwt.JwtService;
@@ -47,16 +48,29 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
             return;
         }
 
-        jwt = authHeader.substring(7);
-        userEmail = jwtService.extractUserEmail(jwt);
-        foundToken = tokenService.findTokenByToken(jwt);
+       try {
+           jwt = authHeader.substring(7);
+           userEmail = jwtService.extractUserEmail(jwt);
+           foundToken = tokenService.findTokenByToken(jwt);
+       } catch (Exception e) {
+           throw new ServletException();
+       }
 
-        if(userEmail != null && foundToken != null &&foundToken.getToken() != null) {
-            User user = this.userService.getByEmail(userEmail);
-            if(user == null) {
+
+        if(userEmail != null
+                && foundToken != null
+                && foundToken.getToken() != null
+                && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+            User user;
+
+            try {
+                user = userService.getByEmail(userEmail);
+            } catch (UnauthorizedNotFoundException e) {
                 filterChain.doFilter(request, response);
                 return;
             }
+
             if(jwtService.isTokenValid(jwt, user)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         user,
