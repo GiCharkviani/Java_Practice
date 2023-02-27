@@ -1,6 +1,5 @@
 package com.todoList.controllers.user;
 
-import com.todoList.AOP.Exceptions.ExceptionObjects.UnauthorizedNotFoundException;
 import com.todoList.entities.User;
 import com.todoList.services.jwt.JwtService;
 import com.todoList.services.user.UserService;
@@ -11,9 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Base64;
 
@@ -27,7 +24,7 @@ public class UserRestAPI {
 
 
     @GetMapping
-    public ResponseEntity<?> getUser() throws UnauthorizedNotFoundException {
+    public ResponseEntity<?> getUser() {
         User tempUser = getAuthenticatedUser();
 
         String image = Base64.getEncoder().encodeToString(ImageUtil.decompressImage(tempUser.getImage().getImage()));
