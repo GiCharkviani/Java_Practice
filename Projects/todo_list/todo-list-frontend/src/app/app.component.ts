@@ -61,7 +61,6 @@ export class AppComponent {
 
   public deleteTodo(id: number) {
     this.http.delete('http://localhost:8080/api/todo/' + id).subscribe(data => {
-      localStorage.removeItem('authToken');
       console.log(data, 'DOTO DELETED')
     });
   }
@@ -80,7 +79,7 @@ export class AppComponent {
       const imageToUpload = {
         name: imageObject.name,
         type: imageObject.type,
-        base64Image: reader.result
+        image: reader.result
       }
       console.log(imageToUpload)
       // @ts-ignore
@@ -96,6 +95,9 @@ export class AppComponent {
   }
 
   public logout(): void {
-    this.http.post('http://localhost:8080/auth/logout', {}).subscribe((data) => console.log(data, 'LOGOUT'))
+    this.http.post('http://localhost:8080/auth/logout', {}).subscribe((data) => {
+      localStorage.removeItem('authToken');
+      console.log('LOG OUT')
+    })
   }
 }

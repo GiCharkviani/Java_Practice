@@ -5,7 +5,7 @@ import com.todoList.AOP.Exceptions.ExceptionObjects.ImageUploadingException;
 import com.todoList.AOP.Exceptions.ExceptionObjects.UnauthorizedNotFoundException;
 import com.todoList.controllers.auth.helpers.AuthenticationRequest;
 import com.todoList.controllers.auth.helpers.AuthenticationResponse;
-import com.todoList.controllers.auth.helpers.ImageOnRegister;
+import com.todoList.controllers.auth.helpers.ImageBase64;
 import com.todoList.controllers.auth.helpers.RegisterRequest;
 import com.todoList.entities.Image;
 import com.todoList.entities.Token;
@@ -37,8 +37,8 @@ public class AuthenticationService {
         String jwtToken;
         User savedUser;
         try {
-            ImageOnRegister image = request.getImage();
-            byte[] imageBytes = Base64.getDecoder().decode(image.getBase64Image().split(",")[1]);
+            ImageBase64 image = request.getImage();
+            byte[] imageBytes = Base64.getDecoder().decode(image.getImage().split(",")[1]);
 
             uploadImage  = imageService.uploadImage(imageBytes, image.getName(), image.getType());
 

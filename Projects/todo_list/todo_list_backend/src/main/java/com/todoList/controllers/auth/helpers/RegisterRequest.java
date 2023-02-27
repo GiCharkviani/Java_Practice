@@ -14,5 +14,5 @@ public class RegisterRequest {
     private String lastname;
     private String email;
     private String password;
-    private ImageOnRegister image;
+    private ImageBase64 image;
 }

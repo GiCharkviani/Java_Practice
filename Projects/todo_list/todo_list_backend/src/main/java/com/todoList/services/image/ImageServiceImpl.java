@@ -13,12 +13,12 @@ import java.io.IOException;
 @AllArgsConstructor
 public class ImageServiceImpl implements ImageService {
 
-    private ImageDAO imageRepository;
+    private ImageDAO imageDAO;
 
     @Override
     @Transactional
     public Image uploadImage(byte[] file, String name, String type) throws IOException {
-        return imageRepository
+        return imageDAO
                 .save(Image.builder()
                         .name(name)
                         .type(type)

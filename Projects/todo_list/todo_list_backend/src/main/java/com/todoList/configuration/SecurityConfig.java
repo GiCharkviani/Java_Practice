@@ -1,7 +1,9 @@
 package com.todoList.configuration;
 
+import com.todoList.AOP.customHandlers.CustomAccessDeniedHandler;
+import com.todoList.AOP.customHandlers.CustomAuthenticationEntryPoint;
 import com.todoList.filters.JwtAuthFilter;
-import com.todoList.services.auth.LogoutService;
+import com.todoList.AOP.customHandlers.LogoutService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +21,8 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutService LogoutService;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -40,7 +44,11 @@ public class SecurityConfig {
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
             .logout()
             .logoutUrl("/auth/logout")
-            .logoutSuccessHandler(LogoutService);
+            .logoutSuccessHandler(LogoutService)
+            .and()
+            .exceptionHandling()
+            .authenticationEntryPoint(authenticationEntryPoint)
+            .accessDeniedHandler(accessDeniedHandler);
 
         return http.build();
     }

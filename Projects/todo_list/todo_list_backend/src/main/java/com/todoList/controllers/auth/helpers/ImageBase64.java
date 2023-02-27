@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageOnRegister {
-    private String base64Image;
+public class ImageBase64 {
+    private String image;
     private String name;
     private String type;
 }
