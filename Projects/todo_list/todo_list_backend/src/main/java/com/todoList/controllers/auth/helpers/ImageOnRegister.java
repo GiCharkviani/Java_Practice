@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
-    private String firstname;
-    private String lastname;
-    private String email;
-    private String password;
-    private ImageOnRegister image;
+public class ImageOnRegister {
+    private String base64Image;
+    private String name;
+    private String type;
 }

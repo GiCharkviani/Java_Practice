@@ -6,7 +6,6 @@ import com.todoList.utils.ImageUtil;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -18,12 +17,12 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     @Transactional
-    public Image uploadImage(MultipartFile file) throws IOException {
+    public Image uploadImage(byte[] file, String name, String type) throws IOException {
         return imageRepository
                 .save(Image.builder()
-                        .name(file.getOriginalFilename())
-                        .type(file.getContentType())
-                        .image(ImageUtil.compressImage(file.getBytes())).build());
+                        .name(name)
+                        .type(type)
+                        .image(ImageUtil.compressImage(file)).build());
 
     }
 }

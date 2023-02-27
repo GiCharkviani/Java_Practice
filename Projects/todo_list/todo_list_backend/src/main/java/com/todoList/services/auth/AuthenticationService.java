@@ -5,6 +5,7 @@ import com.todoList.AOP.Exceptions.ExceptionObjects.ImageUploadingException;
 import com.todoList.AOP.Exceptions.ExceptionObjects.UnauthorizedNotFoundException;
 import com.todoList.controllers.auth.helpers.AuthenticationRequest;
 import com.todoList.controllers.auth.helpers.AuthenticationResponse;
+import com.todoList.controllers.auth.helpers.ImageOnRegister;
 import com.todoList.controllers.auth.helpers.RegisterRequest;
 import com.todoList.entities.Image;
 import com.todoList.entities.Token;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Base64;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +37,10 @@ public class AuthenticationService {
         String jwtToken;
         User savedUser;
         try {
-            uploadImage  = imageService.uploadImage(request.getImage());
+            ImageOnRegister image = request.getImage();
+            byte[] imageBytes = Base64.getDecoder().decode(image.getBase64Image());
+
+            uploadImage  = imageService.uploadImage(imageBytes, image.getName(), image.getType());
 
             User user = User.builder()
                     .firstname(request.getFirstname())

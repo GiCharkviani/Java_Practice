@@ -46,10 +46,7 @@ export class AppComponent {
   }
 
   public register() {
-    const formData = new FormData();
-    const entries = Object.entries(this.registerForm.getRawValue())
-    entries.forEach(([key, value]: [string, any]) => formData.append(key, value || ''))
-    this.http.post('http://localhost:8080/auth/register', formData).subscribe((data: any) => {
+    this.http.post('http://localhost:8080/auth/register', this.registerForm.getRawValue()).subscribe((data: any) => {
       localStorage.setItem('authToken', JSON.stringify(data.token))
       console.log(data, 'REGISTERED')
     })
@@ -76,8 +73,19 @@ export class AppComponent {
   }
 
   public onFileSelected(event: any) {
-    console.log(event.target.files)
-    this.registerForm.get('image')?.setValue(event.target.files[0]);
+    const imageObject = event.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(imageObject);
+    reader.onload = () => {
+      const imageToUpload = {
+        name: imageObject.name,
+        type: imageObject.type,
+        base64Image: reader.result
+      }
+      console.log(imageToUpload)
+      // @ts-ignore
+      this.registerForm.get('image')?.setValue(imageToUpload);
+    }
   }
 
   public userData(): void {
