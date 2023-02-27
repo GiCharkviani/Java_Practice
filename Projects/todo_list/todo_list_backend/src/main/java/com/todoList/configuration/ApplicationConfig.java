@@ -29,6 +29,7 @@ import java.util.List;
  * 6. Refactor code a bit
  * 7. Allow user to edit profile
  * 8. add Swagger
+ * 9. add email and other checks, that there is used right format
  */
 
 @Configuration
