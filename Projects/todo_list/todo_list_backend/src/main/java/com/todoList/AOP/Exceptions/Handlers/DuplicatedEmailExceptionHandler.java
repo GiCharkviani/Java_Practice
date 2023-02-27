@@ -14,7 +14,7 @@ public class DuplicatedEmailExceptionHandler {
         BaseErrorResponse baseErrorResponse = BaseErrorResponse
                 .builder()
                 .status(HttpStatus.UNPROCESSABLE_ENTITY.value())
-                .message("The uses is already registered by the same email: " + duplicatedEmailException.getMessage())
+                .message("The user is already registered by the same email: " + duplicatedEmailException.getMessage())
                 .timeStamp(System.currentTimeMillis())
                 .build();
 

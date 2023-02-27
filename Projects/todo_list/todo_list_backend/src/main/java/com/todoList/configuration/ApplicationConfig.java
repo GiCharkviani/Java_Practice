@@ -1,8 +1,7 @@
 package com.todoList.configuration;
 
-import com.todoList.AOP.Exceptions.ExceptionObjects.UnauthorizedNotFoundException;
+import com.todoList.dao.user.UserDAO;
 import com.todoList.entities.User;
-import com.todoList.services.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,8 +22,15 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * @TODO I am tying to validate by id which is stored in token
+ * @PROBLEM: When user is updated, it won't validate old token, where is
+ * stored previous token (Where is kept old email)
+ * @Trying to find solution
+ */
+
+/**
  * @TODO
- * 3. when deleting todo, new todos are not sent
+ * 3. Should not save new image if user already exists, when registering
  * 5. Handle all possible exceptions and send appoperate response
  * 6. Refactor code a bit
  * 7. Allow user to edit profile
@@ -36,7 +42,7 @@ import java.util.List;
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
-    private final UserService userService;
+    private final UserDAO userDAO;
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
@@ -54,13 +60,10 @@ public class ApplicationConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return email -> {
-            User user;
+            User user = userDAO.getByEmail(email);
 
-            try {
-                user = userService.getByEmail(email);
-            } catch (UnauthorizedNotFoundException e) {
+            if(user == null)
                 throw new UsernameNotFoundException("Invalid email or password");
-            }
 
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), Collections.emptyList());
         };

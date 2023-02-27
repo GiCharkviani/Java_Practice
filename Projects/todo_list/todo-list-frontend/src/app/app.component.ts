@@ -89,7 +89,7 @@ export class AppComponent {
 
   public userData(): void {
      this.http.get('http://localhost:8080/user').pipe(tap((data: any) => {
-       this.imageHere = data.image
+       this.imageHere = data.image.image
        console.log(data, 'USER DATA')
      })).subscribe()
   }

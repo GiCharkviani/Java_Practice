@@ -17,7 +17,7 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "image_id")
-    private Long id;
+    private int id;
 
     @Column(name = "name")
     private String name;

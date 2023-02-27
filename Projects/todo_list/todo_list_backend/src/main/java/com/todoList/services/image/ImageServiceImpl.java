@@ -25,4 +25,9 @@ public class ImageServiceImpl implements ImageService {
                         .image(ImageUtil.compressImage(file)).build());
 
     }
+
+    @Override
+    public void remove(int id) {
+        imageDAO.remove(id);
+    }
 }

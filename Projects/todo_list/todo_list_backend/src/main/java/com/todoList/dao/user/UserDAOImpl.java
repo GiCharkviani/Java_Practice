@@ -12,9 +12,7 @@ import java.util.List;
 @Repository
 @AllArgsConstructor
 public class UserDAOImpl implements UserDAO {
-
     private final EntityManager entityManager;
-
 
     @Override
     public User save(User user) throws DataIntegrityViolationException {

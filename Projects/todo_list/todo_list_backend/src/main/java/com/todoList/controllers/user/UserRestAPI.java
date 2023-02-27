@@ -1,18 +1,17 @@
 package com.todoList.controllers.user;
 
+import com.todoList.controllers.auth.helpers.ImageBase64;
+import com.todoList.controllers.user.helpers.UserRequest;
+import com.todoList.controllers.user.helpers.UserResponse;
+import com.todoList.entities.Image;
 import com.todoList.entities.User;
 import com.todoList.services.jwt.JwtService;
 import com.todoList.services.user.UserService;
-import com.todoList.utils.ImageUtil;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.todoList.utils.Base64Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Base64;
 
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -26,27 +25,48 @@ public class UserRestAPI {
     @GetMapping
     public ResponseEntity<?> getUser() {
         User tempUser = getAuthenticatedUser();
+        Image tempImage = tempUser.getImage();
 
-        String image = Base64.getEncoder().encodeToString(ImageUtil.decompressImage(tempUser.getImage().getImage()));
+        UserResponse userResponse = UserResponse
+                .builder()
+                .firstname(tempUser.getFirstname())
+                .lastname(tempUser.getLastname())
+                .email(tempUser.getEmail())
+                .image(
+                        ImageBase64.builder()
+                        .image(Base64Util.encode(tempImage.getImage()))
+                        .name(tempImage.getName())
+                        .type(tempImage.getType())
+                        .build()
+                )
+                .build();
 
-        ResponseUser responseUser = new ResponseUser();
-        responseUser.setFirstname(tempUser.getFirstname());
-        responseUser.setLastname(tempUser.getLastname());
-        responseUser.setEmail(tempUser.getEmail());
-        responseUser.setImage(image);
-
-        return ResponseEntity.ok(responseUser);
+        return ResponseEntity.ok(userResponse);
     }
 
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Data
-    private static class ResponseUser {
-        private String firstname;
-        private String lastname;
-        private String email;
-        private String image;
+    @PutMapping
+    public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest user) throws Exception {
+        User updatedUser = userService.update(user);
+        Image tempImage = updatedUser.getImage();
+
+        UserResponse userResponse = UserResponse
+                .builder()
+                .firstname(updatedUser.getFirstname())
+                .lastname(updatedUser.getLastname())
+                .email(updatedUser.getEmail())
+                .image(
+                        ImageBase64.builder()
+                                .image(Base64Util.encode(tempImage.getImage()))
+                                .name(tempImage.getName())
+                                .type(tempImage.getType())
+                                .build()
+                )
+                .build();
+
+        return ResponseEntity.ok(userResponse);
     }
+
+
 
     private User getAuthenticatedUser() {
         return ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());

@@ -4,4 +4,5 @@ import com.todoList.entities.Image;
 
 public interface ImageDAO {
     Image save(Image image);
+    void remove(int id);
 }

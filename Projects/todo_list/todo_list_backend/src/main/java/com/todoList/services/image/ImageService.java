@@ -6,4 +6,5 @@ import java.io.IOException;
 
 public interface ImageService {
     Image uploadImage(byte[] image, String name, String type) throws IOException;
+    void remove(int id);
 }

@@ -15,12 +15,12 @@ import com.todoList.services.image.ImageService;
 import com.todoList.services.jwt.JwtService;
 import com.todoList.services.token.TokenService;
 import com.todoList.services.user.UserService;
+import com.todoList.utils.Base64Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Base64;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +38,7 @@ public class AuthenticationService {
         User savedUser;
         try {
             ImageBase64 image = request.getImage();
-            byte[] imageBytes = Base64.getDecoder().decode(image.getImage().split(",")[1]);
+            byte[] imageBytes = Base64Util.decode(image.getImage());
 
             uploadImage  = imageService.uploadImage(imageBytes, image.getName(), image.getType());
 
@@ -56,7 +56,7 @@ public class AuthenticationService {
                 throw new DuplicatedEmailException(user.getEmail());
             }
 
-            jwtToken = jwtService.generateToken(user);
+            jwtToken = jwtService.generateToken(savedUser);
 
             saveUserToken(savedUser, jwtToken);
         } catch (IOException ioException) {
