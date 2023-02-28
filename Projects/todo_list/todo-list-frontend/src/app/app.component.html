@@ -1,44 +1,73 @@
+<button (click)="edit()" style="margin-bottom: 10px">Edit User</button>
 <button (click)="logout()">LogOut</button>
-<hr>
-<h2>LogIn</h2>
-<form [formGroup]="loginForm">
-    <input type="email" formControlName="email">
-    <input type="password" formControlName="password">
-    <input type="submit" value="Login" (click)="login()">
-</form>
-<hr>
-<h2>Register</h2>
 
-<form [formGroup]="registerForm">
-    <input type="text" formControlName="firstname" autocomplete>
-    <input type="text" formControlName="lastname" autocomplete>
-    <input type="text" formControlName="email" autocomplete>
-    <input type="password" formControlName="password" autocomplete="current-password">
-    <input type="file" (change)="onFileSelected($event)" >
-    <br>
-    <input type="submit" (click)="register()" class="Register">
-</form>
+<div *ngIf="!editing">
+    <h2>User Info</h2>
+    <p>First Name: <b>{{userInfo.firstname}}</b></p>
+    <p>First Name: <b>{{userInfo.lastname}}</b></p>
+    <p>First Name: <b>{{userInfo.email}}</b></p>
 
-<hr>
-<h2>Add ToDo</h2>
-<form [formGroup]="todoForm">
-    <input type="text" formControlName="whatTodo">
-    <input type="date" formControlName="whenTodo">
-    <input type="submit" value="Add" (click)="addTodo()">
-</form>
+    <p>Image:
+        <br>
+        <img width="500" height="500" *ngIf="userInfo?.image?.image" [src]="'data:image/png;base64,' + userInfo.image.image" alt="">
+    </p>
+</div>
 
-<hr>
 <br>
+<div *ngIf="!editing">
+    <hr>
+    <h2>LogIn</h2>
+    <form [formGroup]="loginForm">
+        <input placeholder="email" type="email" formControlName="email">
+        <input placeholder="password" type="password" formControlName="password" style="margin-bottom: 10px">
+        <br>
+        <input type="submit" [disabled]="loginForm.invalid" value="Login" (click)="login()">
+    </form>
+    <hr>
+    <h2>Register</h2>
 
+    <form [formGroup]="registerForm">
+        <input placeholder="firstname" type="text" formControlName="firstname" autocomplete>
+        <input placeholder="lastname" type="text" formControlName="lastname" autocomplete>
+        <input placeholder="email" type="text" formControlName="email" autocomplete>
+        <input placeholder="password" type="password" formControlName="password" autocomplete="current-password">
+        <br>
+        <input type="file" (change)="onFileSelected($event)" style="margin-bottom: 10px">
+        <br>
+        <input type="submit" value="Register" [disabled]="registerForm.invalid" (click)="register()" class="Register">
+    </form>
 
-<img width="500" height="500" *ngIf="imageHere" [src]="'data:image/png;base64,' + imageHere" alt="">
+    <hr>
+    <h2>Add ToDo</h2>
+    <form [formGroup]="todoForm">
+        <input type="text" formControlName="whatTodo">
+        <input type="date" formControlName="whenTodo">
+        <input type="submit" value="Add" (click)="addTodo()">
+    </form>
 
-<ng-container *ngIf="todos$ | async as todos">
-    <div *ngFor="let todo of todos">
-        <h4>{{todo.id}}</h4>
-        <p>{{todo['whatTodo']}}</p>
-        <i>{{todo['whenTodo']}}</i>
-        <button (click)="deleteTodo(todo.id)">Delete</button>
-        <button (click)="editTodo(todo.id)">Edit</button>
-    </div>
-</ng-container>
+    <hr>
+
+    <ng-container *ngIf="todos$ | async as todos">
+        <div *ngFor="let todo of todos">
+            <h4>{{todo.id}}</h4>
+            <p>{{todo['whatTodo']}}</p>
+            <i>{{todo['whenTodo']}}</i>
+            <button (click)="deleteTodo(todo.id)">Delete</button>
+            <button (click)="editTodo(todo.id)">Edit</button>
+        </div>
+    </ng-container>
+</div>
+
+<div *ngIf="editing">
+    <h2>Edit User</h2>
+    <form [formGroup]="userEditForm">
+        <input placeholder="firstname" type="text" formControlName="firstname" autocomplete>
+        <input placeholder="lastname" type="text" formControlName="lastname" autocomplete>
+        <input placeholder="email" type="text" formControlName="email" autocomplete>
+        <input placeholder="password" type="password" formControlName="password" autocomplete="current-password">
+        <br>
+        <input type="file" (change)="onFileSelected($event, true)" style="margin-bottom: 10px">
+        <br>
+        <input type="submit" value="Edit"  [disabled]="userEditForm.invalid" (click)="register(true)" class="Register">
+    </form>
+</div>

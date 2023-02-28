@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FormBuilder} from "@angular/forms";
+import {FormBuilder, Validators} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {Observable, tap} from "rxjs";
 
@@ -11,18 +11,27 @@ import {Observable, tap} from "rxjs";
 export class AppComponent {
   title = 'todoList';
   todos$: Observable<any> = this.http.get('http://localhost:8080/api/todo').pipe(tap(data => console.log(data, 'TODOS')));
+  editing: boolean = false;
 
   public loginForm = this.formBuilder.group({
-    email: [],
-    password: []
+    email: ['', Validators.required],
+    password: ['', Validators.required]
   })
 
   public registerForm = this.formBuilder.group({
-    firstname: [],
-    lastname: [],
-    email: [],
-    password: [],
-    image: [],
+    firstname: ['', Validators.required],
+    lastname: ['', Validators.required],
+    email: ['', Validators.required],
+    password: ['', Validators.required],
+    image: ['', Validators.required],
+  })
+
+  public userEditForm = this.formBuilder.group({
+    firstname: ['',],
+    lastname: [''],
+    email: [''],
+    password: [''],
+    image: [''],
   })
 
   public todoForm = this.formBuilder.group({
@@ -32,7 +41,7 @@ export class AppComponent {
     isCompleted: [true]
   })
 
-  public imageHere = ''
+  public userInfo: any = {};
 
   constructor(private readonly http: HttpClient, private readonly formBuilder: FormBuilder) {
     this.userData()
@@ -45,11 +54,18 @@ export class AppComponent {
     })
   }
 
-  public register() {
-    this.http.post('http://localhost:8080/auth/register', this.registerForm.getRawValue()).subscribe((data: any) => {
-      localStorage.setItem('authToken', JSON.stringify(data.token))
-      console.log(data, 'REGISTERED')
-    })
+  public register(editing = false) {
+    if (editing) {
+      this.http.put('http://localhost:8080/user', this.userEditForm.getRawValue()).subscribe((data: any) => {
+        console.log(data, 'EDITED')
+      })
+    } else {
+      this.http.post('http://localhost:8080/auth/register', this.registerForm.getRawValue()).subscribe((data: any) => {
+        localStorage.setItem('authToken', JSON.stringify(data.token))
+        console.log(data, 'REGISTERED')
+      })
+    }
+
   }
 
   public addTodo() {
@@ -71,7 +87,7 @@ export class AppComponent {
     });
   }
 
-  public onFileSelected(event: any) {
+  public onFileSelected(event: any, editing = false) {
     const imageObject = event.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(imageObject);
@@ -83,15 +99,27 @@ export class AppComponent {
       }
       console.log(imageToUpload)
       // @ts-ignore
-      this.registerForm.get('image')?.setValue(imageToUpload);
+      editing ? this.userEditForm.get('image')?.setValue(imageToUpload) : this.registerForm.get('image')?.setValue(imageToUpload);
     }
   }
 
   public userData(): void {
      this.http.get('http://localhost:8080/user').pipe(tap((data: any) => {
-       this.imageHere = data.image.image
+       this.userInfo = data
        console.log(data, 'USER DATA')
      })).subscribe()
+  }
+
+  public edit() {
+    this.editing = !this.editing;
+
+    if(this.editing) {
+      this.userEditForm.patchValue({
+        firstname: this.userInfo.firstname,
+        lastname: this.userInfo.lastname,
+        email: this.userInfo.email,
+      })
+    }
   }
 
   public logout(): void {
