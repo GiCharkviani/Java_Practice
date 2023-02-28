@@ -16,21 +16,19 @@ public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "image_id")
     private int id;
 
-    @Column(name = "name")
     private String name;
-
-    @Column(name = "type")
     private String type;
 
-    @OneToOne(mappedBy = "image",
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToOne(
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+            fetch = FetchType.LAZY)
+    @MapsId
     private User user;
 
     @Lob
-    @Column(name= "image", length = 1000)
+    @Column(length = 1000)
     private byte[] image;
 
 }

@@ -5,7 +5,6 @@ import com.todoList.AOP.Exceptions.ExceptionObjects.ImageUploadingException;
 import com.todoList.AOP.Exceptions.ExceptionObjects.UnauthorizedNotFoundException;
 import com.todoList.controllers.auth.helpers.AuthenticationRequest;
 import com.todoList.controllers.auth.helpers.AuthenticationResponse;
-import com.todoList.controllers.auth.helpers.ImageBase64;
 import com.todoList.controllers.auth.helpers.RegisterRequest;
 import com.todoList.entities.Image;
 import com.todoList.entities.Token;
@@ -20,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,25 +33,19 @@ public class AuthenticationService {
 
 
     public AuthenticationResponse register(RegisterRequest request) throws Exception {
-        Image uploadImage;
-        String jwtToken;
-        User savedUser;
+        final Image uploadImage;
+        final String jwtToken;
+        final User savedUser;
         try {
             boolean userExists = userService.checkIfExists(request.getEmail());
 
             if(userExists)
                 throw new DuplicatedEmailException(request.getEmail());
 
-            ImageBase64 image = request.getImage();
-            byte[] imageBytes = Base64Util.decode(image.getImage());
-
-            uploadImage  = imageService.uploadImage(imageBytes, image.getName(), image.getType());
-
             User user = User.builder()
                     .firstname(request.getFirstname())
                     .lastname(request.getLastname())
                     .email(request.getEmail())
-                    .image(uploadImage)
                     .password(passwordEncoder.encode(request.getPassword()))
                     .build();
 
@@ -62,7 +54,10 @@ public class AuthenticationService {
             jwtToken = generateToken(savedUser);
 
             saveUserToken(savedUser, jwtToken);
-        } catch (IOException | IllegalArgumentException exception) {
+
+            imageService.uploadImage(Base64Util.imageEntity(request.getImage(), savedUser));
+
+        } catch (IllegalArgumentException exception) {
             throw new ImageUploadingException("An image couldn't be processed. Please make sure that you are providing right value");
         }
 
@@ -73,13 +68,13 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse login(AuthenticationRequest request) throws Exception {
-        User user = userService.getByEmail(request.getEmail());
+        final User user = userService.getByEmail(request.getEmail());
 
         if(!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new UnauthorizedNotFoundException("User was not found");
         }
 
-        String jwtToken = generateToken(user);
+        final String jwtToken = generateToken(user);
 
         saveUserToken(user, jwtToken);
 

@@ -19,18 +19,14 @@ public class User  {
     private int id;
     private String firstname;
     private String lastname;
+    private String password;
 
     @Column(unique = true, nullable = false, length = 1000)
     private String email;
-    private String password;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Todo> todos;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Token> tokens;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_id")
-    private Image image;
 }

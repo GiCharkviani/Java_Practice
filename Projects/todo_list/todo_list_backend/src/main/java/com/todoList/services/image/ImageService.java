@@ -2,9 +2,8 @@ package com.todoList.services.image;
 
 import com.todoList.entities.Image;
 
-import java.io.IOException;
-
 public interface ImageService {
-    Image uploadImage(byte[] image, String name, String type) throws IOException;
+    Image get(int id);
+    Image uploadImage(Image image);
     void remove(int id);
 }

@@ -3,7 +3,6 @@ package com.todoList.services.todo;
 import com.todoList.dao.todo.TodoDAOImpl;
 import com.todoList.entities.Todo;
 import com.todoList.entities.User;
-import com.todoList.services.user.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,7 +15,6 @@ import java.util.List;
 public class TodoServiceImpl implements TodoService {
 
     private final TodoDAOImpl todoDAO;
-    private final UserService userService;
 
 
     @Override

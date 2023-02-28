@@ -13,6 +13,11 @@ public class ImageDAOImpl implements ImageDAO {
     private EntityManager entityManager;
 
     @Override
+    public Image get(int id) {
+        return entityManager.find(Image.class, id);
+    }
+
+    @Override
     public Image save(Image image) {
         return entityManager.merge(image);
     }

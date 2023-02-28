@@ -1,5 +1,8 @@
 package com.todoList.utils;
 
+import com.todoList.controllers.auth.helpers.ImageBase64;
+import com.todoList.entities.Image;
+import com.todoList.entities.User;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Base64;
@@ -15,5 +18,15 @@ public class Base64Util {
                 base64File;
 
         return Base64.getDecoder().decode(readyBase64File);
+    }
+
+    public static Image imageEntity(ImageBase64 imageBase64, User user) {
+        byte[] imageBytes = decode(imageBase64.getImage());
+        return Image.builder()
+                .name(imageBase64.getName())
+                .type(imageBase64.getType())
+                .user(user)
+                .image(ImageUtil.compressImage(imageBytes))
+                .build();
     }
 }

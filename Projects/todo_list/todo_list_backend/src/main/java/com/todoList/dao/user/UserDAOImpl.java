@@ -37,7 +37,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public Boolean checkIfExists(String email) {
+    public Boolean checkIfEmailExists(String email) {
         return entityManager
                 .createQuery("SELECT EXISTS(SELECT 1 FROM User WHERE email =: providedEmail)", Boolean.class)
                 .setParameter("providedEmail", email)
