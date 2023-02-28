@@ -20,7 +20,7 @@ public class TokenServiceImpl implements TokenService {
         try {
             return tokenDAO.findTokenByToken(token);
         } catch (InvalidDataAccessResourceUsageException exception) {
-            throw new UnauthorizedNotFoundException();
+            throw new UnauthorizedNotFoundException("Token was not found");
         }
     }
 

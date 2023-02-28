@@ -11,9 +11,12 @@ import com.todoList.services.image.ImageService;
 import com.todoList.utils.Base64Util;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User save(User user) throws Exception {
+    public User save(User user) {
         return userDAO.save(user);
     }
 
@@ -41,10 +44,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User update(UserRequest user) throws Exception {
-        User updateUserEmail = userDAO.getByEmail(user.getEmail());
+    public User getById(int id) {
+        return userDAO.getById(id);
+    }
 
-        if(updateUserEmail != null)
+    @Override
+    @Transactional
+    public User update(UserRequest user) throws Exception {
+        boolean userExists = userDAO.checkIfExists(user.getEmail());
+
+        if(userExists)
             throw new DuplicatedEmailException(user.getEmail());
 
         User foundUser = userDAO.getByEmail(getAuthenticatedUser().getEmail());
@@ -66,7 +75,19 @@ public class UserServiceImpl implements UserService {
 
         imageService.remove(foundUserImageId);
 
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                foundUser,
+                null,
+                Collections.emptyList()
+        );
+        SecurityContextHolder.getContext().setAuthentication(authToken);
+
         return save(foundUser);
+    }
+
+    @Override
+    public Boolean checkIfExists(String email) {
+        return userDAO.checkIfExists(email);
     }
 
     private User getAuthenticatedUser() {

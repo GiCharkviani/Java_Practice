@@ -15,7 +15,7 @@ public class UserDAOImpl implements UserDAO {
     private final EntityManager entityManager;
 
     @Override
-    public User save(User user) throws DataIntegrityViolationException {
+    public User save(User user) {
         return entityManager.merge(user);
     }
 
@@ -30,4 +30,19 @@ public class UserDAOImpl implements UserDAO {
         }
         return null;
     }
+
+    @Override
+    public User getById(int id) {
+        return entityManager.find(User.class, id);
+    }
+
+    @Override
+    public Boolean checkIfExists(String email) {
+        return entityManager
+                .createQuery("SELECT EXISTS(SELECT 1 FROM User WHERE email =: providedEmail)", Boolean.class)
+                .setParameter("providedEmail", email)
+                .getSingleResult();
+    }
+
+
 }

@@ -10,7 +10,7 @@ public class Base64Util {
     }
 
     public static byte[] decode(@NotNull String base64File) {
-        String readyBase64File = base64File.substring(0, 11).contains("base64") ?
+        String readyBase64File = base64File.substring(0, 50).contains("base64") ?
                 base64File.split(",")[1] :
                 base64File;
 

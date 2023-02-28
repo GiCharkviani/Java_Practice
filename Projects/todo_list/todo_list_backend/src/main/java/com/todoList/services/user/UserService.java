@@ -5,7 +5,9 @@ import com.todoList.controllers.user.helpers.UserRequest;
 import com.todoList.entities.User;
 
 public interface UserService {
-    User save(User user) throws Exception;
+    User save(User user);
     User getByEmail(String email) throws UnauthorizedNotFoundException;
+    User getById(int id);
     User update(UserRequest user) throws Exception;
+    Boolean checkIfExists(String email);
 }

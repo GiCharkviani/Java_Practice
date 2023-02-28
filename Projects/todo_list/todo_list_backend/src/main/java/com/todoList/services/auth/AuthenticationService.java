@@ -21,6 +21,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +39,11 @@ public class AuthenticationService {
         String jwtToken;
         User savedUser;
         try {
+            boolean userExists = userService.checkIfExists(request.getEmail());
+
+            if(userExists)
+                throw new DuplicatedEmailException(request.getEmail());
+
             ImageBase64 image = request.getImage();
             byte[] imageBytes = Base64Util.decode(image.getImage());
 
@@ -50,16 +57,12 @@ public class AuthenticationService {
                     .password(passwordEncoder.encode(request.getPassword()))
                     .build();
 
-            try {
-                savedUser = userService.save(user);
-            } catch (Exception e) {
-                throw new DuplicatedEmailException(user.getEmail());
-            }
+            savedUser = userService.save(user);
 
-            jwtToken = jwtService.generateToken(savedUser);
+            jwtToken = generateToken(savedUser);
 
             saveUserToken(savedUser, jwtToken);
-        } catch (IOException ioException) {
+        } catch (IOException | IllegalArgumentException exception) {
             throw new ImageUploadingException("An image couldn't be processed. Please make sure that you are providing right value");
         }
 
@@ -76,7 +79,7 @@ public class AuthenticationService {
             throw new UnauthorizedNotFoundException("User was not found");
         }
 
-        String jwtToken = jwtService.generateToken(user);
+        String jwtToken = generateToken(user);
 
         saveUserToken(user, jwtToken);
 
@@ -94,5 +97,15 @@ public class AuthenticationService {
                 .build();
 
         tokenService.save(token);
+    }
+
+    private String generateToken(User user) {
+        Map<String, String> userMap = new HashMap<>();
+        userMap.put("id", Integer.toString(user.getId()));
+        userMap.put("email", user.getEmail());
+        userMap.put("firstname", user.getFirstname());
+        userMap.put("lastname", user.getLastname());
+
+        return jwtService.generateToken(userMap);
     }
 }
