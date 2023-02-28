@@ -22,15 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @TODO I am tying to validate by id which is stored in token
- * @PROBLEM: When user is updated, it won't validate old token, where is
- * stored previous token (Where is kept old email)
- * @Trying to find solution
- */
-
-/**
  * @TODO
- * 3. Should not save new image if user already exists, when registering
  * 5. Handle all possible exceptions and send appoperate response
  * 6. Refactor code a bit
  * 7. Allow user to edit profile
