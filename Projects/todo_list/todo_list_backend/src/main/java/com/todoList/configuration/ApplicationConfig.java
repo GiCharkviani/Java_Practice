@@ -23,8 +23,7 @@ import java.util.List;
 
 /**
  * @TODO
- * 4. User delete route
- * 5. Todo status route
+ * 4. User delete route (doesn't work)
  * 5. Handle all possible exceptions and send appoperate response
  * 6. Refactor code a bit
  * 9. add Swagger
