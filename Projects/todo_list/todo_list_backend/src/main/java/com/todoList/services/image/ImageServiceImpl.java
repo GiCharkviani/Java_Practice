@@ -14,7 +14,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     @Transactional
-    public Image get(int id) {
+    public Image get(long id) {
         return imageDAO.get(id);
     }
 
@@ -26,7 +26,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     @Transactional
-    public void delete(int id) {
+    public void delete(long id) {
         imageDAO.delete(id);
     }
 }

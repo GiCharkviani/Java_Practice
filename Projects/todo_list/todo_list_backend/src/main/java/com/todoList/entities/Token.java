@@ -16,8 +16,7 @@ public class Token {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    public Integer id;
-
+    public long id;
     @NotNull
     @Column(unique = true, length = 1000)
     public String token;

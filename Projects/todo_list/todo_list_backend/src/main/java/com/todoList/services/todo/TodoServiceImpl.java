@@ -33,7 +33,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     @Transactional
-    public Todo get(int id) {
+    public Todo get(long id) {
         return todoDAO.get(id);
     }
 
@@ -63,13 +63,13 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     @Transactional
-    public void updateStatus(int id, Status status) {
+    public void updateStatus(long id, Status status) {
         todoDAO.updateStatus(id, status);
     }
 
     @Override
     @Transactional
-    public Todo delete(int id) {
+    public Todo delete(long id) {
        return todoDAO.delete(id);
     }
 

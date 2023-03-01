@@ -25,7 +25,7 @@ public class TodoRestAPI {
     }
 
     @GetMapping("/{todoId}")
-    ResponseEntity<?> getTodo(@PathVariable int todoId) {
+    ResponseEntity<?> getTodo(@PathVariable long todoId) {
         return ResponseEntity.ok(todoService.get(todoId));
     }
 
@@ -47,7 +47,7 @@ public class TodoRestAPI {
 
 
     @DeleteMapping("/{todoId}")
-    ResponseEntity<?> deleteTodo(@PathVariable int todoId) {
+    ResponseEntity<?> deleteTodo(@PathVariable long todoId) {
         return ResponseEntity.ok(todoService.delete(todoId));
     }
 }

@@ -23,11 +23,10 @@ import java.util.List;
 
 /**
  * @TODO
- * 4. User delete route (doesn't work)
+ * 10. add email and other checks, that there is used right format
  * 5. Handle all possible exceptions and send appoperate response
  * 6. Refactor code a bit
  * 9. add Swagger
- * 10. add email and other checks, that there is used right format
  */
 
 @Configuration

@@ -7,7 +7,7 @@ import com.todoList.entities.User;
 public interface UserService {
     User save(User user);
     User getByEmail(String email) throws UnauthorizedNotFoundException;
-    User getById(int id);
+    User getById(long id);
     User update(UserRequest user) throws Exception;
     Boolean checkIfExists(String email);
     void delete() throws Exception;

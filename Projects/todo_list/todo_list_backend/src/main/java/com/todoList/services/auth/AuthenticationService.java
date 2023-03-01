@@ -79,7 +79,7 @@ public class AuthenticationService {
 
     private String generateToken(User user) {
         Map<String, String> userMap = new HashMap<>();
-        userMap.put("id", Integer.toString(user.getId()));
+        userMap.put("id", Long.toString(user.getId()));
         userMap.put("email", user.getEmail());
         userMap.put("firstname", user.getFirstname());
         userMap.put("lastname", user.getLastname());

@@ -3,7 +3,7 @@ package com.todoList.services.image;
 import com.todoList.entities.Image;
 
 public interface ImageService {
-    Image get(int id);
+    Image get(long id);
     Image uploadImage(Image image);
-    void delete(int id);
+    void delete(long id);
 }

@@ -12,7 +12,7 @@ public class ImageDAOImpl implements ImageDAO {
     private EntityManager entityManager;
 
     @Override
-    public Image get(int id) {
+    public Image get(long id) {
         return entityManager.find(Image.class, id);
     }
 
@@ -22,7 +22,7 @@ public class ImageDAOImpl implements ImageDAO {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
         Image image = get(id);
         image.setUser(null);
         entityManager.remove(image);

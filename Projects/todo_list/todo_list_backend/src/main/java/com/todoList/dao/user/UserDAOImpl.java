@@ -40,7 +40,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User getById(int id) {
+    public User getById(long id) {
         return entityManager.find(User.class, id);
     }
 
@@ -69,7 +69,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
         User user = getById(id);
         user.setTodos(null);
         user.setTokens(null);

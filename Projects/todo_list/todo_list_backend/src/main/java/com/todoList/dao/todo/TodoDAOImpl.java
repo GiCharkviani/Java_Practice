@@ -38,7 +38,7 @@ public class TodoDAOImpl implements TodoDAO {
     }
 
     @Override
-    public Todo get(int id) throws NotFoundException {
+    public Todo get(long id) throws NotFoundException {
         Query theQuery = entityManager.createQuery("FROM Todo WHERE user=:user AND id=:todoId")
                 .setParameter("user", AuthenticatedUser.user())
                 .setParameter("todoId", id);
@@ -72,7 +72,7 @@ public class TodoDAOImpl implements TodoDAO {
     }
 
     @Override
-    public void updateStatus(int id, Status status) {
+    public void updateStatus(long id, Status status) {
         Todo tempTodo = get(id);
         tempTodo.setStatus(status);
         save(tempTodo);
@@ -80,7 +80,7 @@ public class TodoDAOImpl implements TodoDAO {
 
 
     @Override
-    public Todo delete(int id) throws NotFoundException {
+    public Todo delete(long id) throws NotFoundException {
         Todo todo = get(id);
         this.entityManager.remove(todo);
         return todo;

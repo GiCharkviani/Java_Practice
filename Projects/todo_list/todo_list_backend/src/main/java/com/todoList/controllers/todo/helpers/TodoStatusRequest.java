@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TodoStatusRequest {
-    int id;
+    long id;
     Status status;
 }

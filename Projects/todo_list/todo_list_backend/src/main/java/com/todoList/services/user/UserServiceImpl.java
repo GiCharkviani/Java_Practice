@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User getById(int id) {
+    public User getById(long id) {
         return userDAO.getById(id);
     }
 
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void delete() throws Exception {
-        int userId = AuthenticatedUser.user().getId();
+        long userId = AuthenticatedUser.user().getId();
         List<Todo> todos = todoService.getAll();
         List<Token> tokens = tokenService.getAll();
 

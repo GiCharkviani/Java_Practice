@@ -21,8 +21,7 @@ public class Todo
 {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
-
+    private long id;
     @NotNull
     @Column(length = 5000)
     private String whatTodo;

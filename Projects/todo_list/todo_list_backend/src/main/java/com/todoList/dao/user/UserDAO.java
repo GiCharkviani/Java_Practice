@@ -8,7 +8,7 @@ public interface UserDAO {
     User save(User user);
     User update(UserRequest user) throws Exception;
     User getByEmail(String email) throws UnauthorizedNotFoundException;
-    User getById(int id);
+    User getById(long id);
     Boolean checkIfEmailExists(String email);
-    void delete(int id);
+    void delete(long id);
 }
