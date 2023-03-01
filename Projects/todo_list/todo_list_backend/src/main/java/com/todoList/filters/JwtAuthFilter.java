@@ -49,7 +49,7 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
        try {
            jwt = authHeader.substring(7);
            userId = JwtUtil.extractUserId(jwt);
-           foundToken = tokenService.findTokenByToken(jwt);
+           foundToken = tokenService.getByToken(jwt);
        }
        catch (Exception e) {
            System.out.println("Error while filtering: " + e.getMessage());

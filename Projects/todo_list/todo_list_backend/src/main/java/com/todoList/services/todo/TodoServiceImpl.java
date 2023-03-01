@@ -22,8 +22,13 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     @Transactional
-    public List<Todo> getAll(int from, int to) {
-        return todoDAO.getAll(from, to);
+    public List<Todo> getAllLimited(int from, int to) {
+        return todoDAO.getAllLimited(from, to);
+    }
+
+    @Override
+    public List<Todo> getAll() {
+        return todoDAO.getAll();
     }
 
     @Override

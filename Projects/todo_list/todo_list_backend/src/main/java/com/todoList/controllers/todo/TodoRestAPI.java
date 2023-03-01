@@ -21,7 +21,7 @@ public class TodoRestAPI {
             @RequestParam(value = "from", required = false, defaultValue = "1") int from,
             @RequestParam(value = "to", required = false, defaultValue = "10") int to
     ) {
-        return todoService.getAll(from, to);
+        return todoService.getAllLimited(from, to);
     }
 
     @GetMapping("/{todoId}")

@@ -22,11 +22,18 @@ public class TodoDAOImpl implements TodoDAO {
     private final EntityManager entityManager;
 
     @Override
-    public List<Todo> getAll(int from, int to) {
+    public List<Todo> getAllLimited(int from, int to) {
         Query theQuery = entityManager.createQuery("FROM Todo WHERE user=:user ORDER BY whenTodo DESC")
                 .setParameter("user", AuthenticatedUser.user());
         theQuery.setFirstResult(from - 1);
         theQuery.setMaxResults(to - from + 1);
+        return theQuery.getResultList();
+    }
+
+    @Override
+    public List<Todo> getAll() {
+        Query theQuery = entityManager.createQuery("FROM Todo WHERE user=:user ORDER BY whenTodo DESC")
+                .setParameter("user", AuthenticatedUser.user());
         return theQuery.getResultList();
     }
 

@@ -3,14 +3,20 @@
 
 <div *ngIf="!editing">
     <h2>User Info</h2>
+    <p>ID <b>{{userInfo.id}}</b></p>
     <p>First Name: <b>{{userInfo.firstname}}</b></p>
-    <p>First Name: <b>{{userInfo.lastname}}</b></p>
-    <p>First Name: <b>{{userInfo.email}}</b></p>
+    <p>Last Name: <b>{{userInfo.lastname}}</b></p>
+    <p>email Name: <b>{{userInfo.email}}</b></p>
 
-    <p>Image:
-        <br>
-        <img width="500" height="500" *ngIf="userInfo?.image?.image" [src]="'data:image/png;base64,' + userInfo.image.image" alt="">
-    </p>
+
+<div>
+    <br>
+    <p>Image Name: <b>{{userInfo?.image?.name}}</b></p>
+    <p>Image Type: <b>{{userInfo?.image?.type}}</b></p>
+    <p>Image:</p>
+    <img width="500" height="500" *ngIf="userInfo?.image?.image" [src]="'data:image/png;base64,' + userInfo.image.image" alt="">
+</div>
+
 </div>
 
 <br>

@@ -10,5 +10,5 @@ public interface UserService {
     User getById(int id);
     User update(UserRequest user) throws Exception;
     Boolean checkIfExists(String email);
-    void delete();
+    void delete() throws Exception;
 }

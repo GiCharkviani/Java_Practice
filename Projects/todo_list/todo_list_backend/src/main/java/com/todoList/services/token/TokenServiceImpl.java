@@ -7,6 +7,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {
@@ -15,8 +17,13 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     @Transactional
-    public Token findTokenByToken(String token) throws UnauthorizedNotFoundException {
-        return tokenDAO.findTokenByToken(token);
+    public Token getByToken(String token) throws UnauthorizedNotFoundException {
+        return tokenDAO.getByToken(token);
+    }
+
+    @Override
+    public List<Token> getAll() {
+        return tokenDAO.getAll();
     }
 
     @Override
@@ -27,7 +34,7 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     @Transactional
-    public void remove(String token) throws UnauthorizedNotFoundException {
-        tokenDAO.remove(token);
+    public void delete(String token) throws UnauthorizedNotFoundException {
+        tokenDAO.delete(token);
     }
 }

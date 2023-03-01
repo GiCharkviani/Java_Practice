@@ -3,8 +3,11 @@ package com.todoList.dao.token;
 import com.todoList.AOP.Exceptions.ExceptionObjects.UnauthorizedNotFoundException;
 import com.todoList.entities.Token;
 
+import java.util.List;
+
 public interface TokenDAO {
-    Token findTokenByToken(String token) throws UnauthorizedNotFoundException;
+    Token getByToken(String token) throws UnauthorizedNotFoundException;
+    List<Token> getAll();
     Token save(Token token);
-    void remove(String token) throws UnauthorizedNotFoundException;
+    void delete(String token) throws UnauthorizedNotFoundException;
 }

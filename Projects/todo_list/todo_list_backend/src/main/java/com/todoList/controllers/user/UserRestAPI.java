@@ -28,7 +28,7 @@ public class UserRestAPI {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteUser() {
+    public ResponseEntity<?> deleteUser() throws Exception {
         userService.delete();
         return ResponseEntity.ok().build();
     }

@@ -35,7 +35,7 @@ public class LogoutService extends SimpleUrlLogoutSuccessHandler {
 
         if(!readyJwt.isEmpty()) {
             try {
-                this.tokenService.remove(readyJwt);
+                this.tokenService.delete(readyJwt);
             } catch (Exception e) {
                 customBaseResponse(response, "Token was not found", HttpStatus.UNAUTHORIZED.value());
             }
