@@ -22,12 +22,11 @@ public class ImageServiceImpl implements ImageService {
     @Transactional
     public Image uploadImage(Image image) {
         return imageDAO.save(image);
-
     }
 
     @Override
     @Transactional
-    public void remove(int id) {
-        imageDAO.remove(id);
+    public void delete(int id) {
+        imageDAO.delete(id);
     }
 }

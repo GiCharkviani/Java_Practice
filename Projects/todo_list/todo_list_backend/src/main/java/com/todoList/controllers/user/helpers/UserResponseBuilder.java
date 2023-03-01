@@ -27,6 +27,7 @@ public class UserResponseBuilder {
 
         return UserResponse
                 .builder()
+                .id(user.getId())
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .email(user.getEmail())

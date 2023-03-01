@@ -2,9 +2,9 @@ package com.todoList.filters;
 
 import com.todoList.entities.Token;
 import com.todoList.entities.User;
-import com.todoList.services.jwt.JwtService;
 import com.todoList.services.token.TokenService;
 import com.todoList.services.user.UserService;
+import com.todoList.utils.JwtUtil;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,7 +26,6 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
 
-    private final JwtService jwtService;
     private final UserService userService;
     private final TokenService tokenService;
 
@@ -49,7 +48,7 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
 
        try {
            jwt = authHeader.substring(7);
-           userId = jwtService.extractUserId(jwt);
+           userId = JwtUtil.extractUserId(jwt);
            foundToken = tokenService.findTokenByToken(jwt);
        }
        catch (Exception e) {
@@ -64,7 +63,7 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
 
             User user = userService.getById(Integer.parseInt(userId));
 
-            if(user != null && jwtService.isTokenValid(jwt, user)) {
+            if(user != null && JwtUtil.isTokenValid(jwt, user)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         user,
                         null,

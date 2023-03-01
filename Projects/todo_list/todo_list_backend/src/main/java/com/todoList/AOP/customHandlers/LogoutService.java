@@ -8,6 +8,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
@@ -28,23 +29,31 @@ public class LogoutService extends SimpleUrlLogoutSuccessHandler {
         try {
             readyJwt = jwtWithBearer.substring(7);
         } catch (StringIndexOutOfBoundsException exception) {
-            CustomBaseResponse customBaseResponse = CustomBaseResponse
-                    .builder()
-                    .message("Token has invalid format")
-                    .status(498)
-                    .build();
-
-            response.setContentType("application/json");
-            response.setStatus(498);
-            response.getWriter().write(ClassToJsonUtil.toJson(customBaseResponse));
+            customBaseResponse(response, "Invalid token", 498);
             return;
         }
 
         if(!readyJwt.isEmpty()) {
-            this.tokenService.remove(readyJwt);
+            try {
+                this.tokenService.remove(readyJwt);
+            } catch (Exception e) {
+                customBaseResponse(response, "Token was not found", HttpStatus.UNAUTHORIZED.value());
+            }
         }
 
         SecurityContextHolder.clearContext();
         super.onLogoutSuccess(request, response, authentication);
+    }
+
+    private void customBaseResponse(HttpServletResponse response, String text, int status) throws IOException {
+        CustomBaseResponse customBaseResponse = CustomBaseResponse
+                .builder()
+                .message(text)
+                .status(status)
+                .build();
+
+        response.setContentType("application/json");
+        response.setStatus(status);
+        response.getWriter().write(ClassToJsonUtil.toJson(customBaseResponse));
     }
 }

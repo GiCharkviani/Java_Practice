@@ -1,54 +1,71 @@
 package com.todoList.services.todo;
 
-import com.todoList.dao.todo.TodoDAOImpl;
+import com.todoList.controllers.todo.helpers.TodoRequest;
+import com.todoList.dao.todo.TodoDAO;
 import com.todoList.entities.Todo;
-import com.todoList.entities.User;
+import com.todoList.enums.todo.Status;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class TodoServiceImpl implements TodoService {
 
-    private final TodoDAOImpl todoDAO;
+    private final TodoDAO todoDAO;
 
 
     @Override
     @Transactional
     public List<Todo> getAll(int from, int to) {
-        return todoDAO.getAll(getAuthenticatedUser(), from, to);
+        return todoDAO.getAll(from, to);
     }
 
     @Override
     @Transactional
-    public Todo findById(int id) {
-        return todoDAO.findById(id, getAuthenticatedUser());
+    public Todo get(int id) {
+        return todoDAO.get(id);
     }
 
     @Override
     @Transactional
-    public Todo save(Todo todo) {
-        todo.setUser(getAuthenticatedUser());
+    public Todo save(TodoRequest todoRequest) {
+        LocalDateTime localDateTime = LocalDateTime.
+                ofInstant(Instant.ofEpochMilli(System.currentTimeMillis()), ZoneId.systemDefault());
+
+        Todo todo = Todo
+                .builder()
+                .whatTodo(todoRequest.getWhatTodo())
+                .whenTodo(todoRequest.getWhenTodo())
+                .status(todoRequest.getStatus())
+                .createdAt(localDateTime)
+                .lastModifiedAt(localDateTime)
+                .build();
+
         return todoDAO.save(todo);
     }
 
     @Override
     @Transactional
     public Todo update(Todo todo) {
-        return todoDAO.update(todo, getAuthenticatedUser());
+        return todoDAO.update(todo);
     }
 
     @Override
     @Transactional
-    public void deleteById(long id) {
-        todoDAO.deleteById(id, getAuthenticatedUser());
+    public void updateStatus(int id, Status status) {
+        todoDAO.updateStatus(id, status);
     }
 
-    private User getAuthenticatedUser() {
-        return ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+    @Override
+    @Transactional
+    public Todo delete(int id) {
+       return todoDAO.delete(id);
     }
+
 }

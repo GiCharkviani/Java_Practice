@@ -5,7 +5,6 @@ import com.todoList.dao.token.TokenDAO;
 import com.todoList.entities.Token;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,11 +16,7 @@ public class TokenServiceImpl implements TokenService {
     @Override
     @Transactional
     public Token findTokenByToken(String token) throws UnauthorizedNotFoundException {
-        try {
-            return tokenDAO.findTokenByToken(token);
-        } catch (InvalidDataAccessResourceUsageException exception) {
-            throw new UnauthorizedNotFoundException("Token was not found");
-        }
+        return tokenDAO.findTokenByToken(token);
     }
 
     @Override
@@ -32,7 +27,7 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     @Transactional
-    public void remove(String token) {
+    public void remove(String token) throws UnauthorizedNotFoundException {
         tokenDAO.remove(token);
     }
 }

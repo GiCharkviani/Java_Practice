@@ -1,69 +1,81 @@
 package com.todoList.dao.todo;
 
+import com.todoList.AOP.Exceptions.ExceptionObjects.NotFoundException;
 import com.todoList.entities.Todo;
-import com.todoList.entities.User;
+import com.todoList.enums.todo.Status;
+import com.todoList.utils.AuthenticatedUser;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.Query;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Repository
 @AllArgsConstructor
 public class TodoDAOImpl implements TodoDAO {
-
     private final EntityManager entityManager;
 
-
     @Override
-    public List<Todo> getAll(User user, int from, int to) {
+    public List<Todo> getAll(int from, int to) {
         Query theQuery = entityManager.createQuery("FROM Todo WHERE user=:user ORDER BY whenTodo DESC")
-                .setParameter("user", user);
+                .setParameter("user", AuthenticatedUser.user());
         theQuery.setFirstResult(from - 1);
         theQuery.setMaxResults(to - from + 1);
         return theQuery.getResultList();
     }
 
     @Override
-    public Todo findById(int id, User user) {
+    public Todo get(int id) throws NotFoundException {
         Query theQuery = entityManager.createQuery("FROM Todo WHERE user=:user AND id=:todoId")
-                .setParameter("user", user)
+                .setParameter("user", AuthenticatedUser.user())
                 .setParameter("todoId", id);
 
-        List<Todo> todos = theQuery.getResultList();
-
-        return todos.isEmpty() ? null : todos.get(0);
+        try {
+            return (Todo) theQuery.getSingleResult();
+        } catch (NoResultException | NonUniqueResultException e) {
+            throw new NotFoundException("ToDo was not found. Id: " + id);
+        }
     }
 
     @Override
     public Todo save(Todo todo) {
-        Todo foundTodo = entityManager.find(Todo.class, todo.getId());
-        if (foundTodo != null) {
-            throw new RuntimeException();
-        }
+        todo.setUser(AuthenticatedUser.user());
         return entityManager.merge(todo);
     }
 
     @Override
-    public Todo update(Todo todo, User user) {
-        Todo tempTodo = findById(todo.getId(), user);
-        if(tempTodo == null) {
-            return null;
-        }
+    public Todo update(Todo todo) throws NotFoundException {
+        Todo tempTodo = get(todo.getId());
+
+        LocalDateTime localDateTime = LocalDateTime.
+                ofInstant(Instant.ofEpochMilli(System.currentTimeMillis()), ZoneId.systemDefault());
+
         tempTodo.setWhatTodo(todo.getWhatTodo());
         tempTodo.setWhenTodo(todo.getWhenTodo());
+        tempTodo.setStatus(todo.getStatus());
+        tempTodo.setLastModifiedAt(localDateTime);
 
-        return entityManager.merge(tempTodo);
+        return save(tempTodo);
+    }
+
+    @Override
+    public void updateStatus(int id, Status status) {
+        Todo tempTodo = get(id);
+        tempTodo.setStatus(status);
+        save(tempTodo);
     }
 
 
     @Override
-    public void deleteById(long id, User user) {
-        Query theQuery = entityManager.createQuery("DELETE FROM Todo WHERE id=:todoId AND user=:user")
-                .setParameter("todoId", id)
-                .setParameter("user", user);
-
-        theQuery.executeUpdate();
+    public Todo delete(int id) throws NotFoundException {
+        Todo todo = get(id);
+        this.entityManager.remove(todo);
+        return todo;
     }
 }

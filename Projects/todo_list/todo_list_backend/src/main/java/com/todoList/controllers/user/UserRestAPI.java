@@ -27,4 +27,10 @@ public class UserRestAPI {
         return ResponseEntity.ok(userResponseBuilder.build(userService.update(user)));
     }
 
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser() {
+        userService.delete();
+        return ResponseEntity.ok().build();
+    }
+
 }

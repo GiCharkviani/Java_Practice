@@ -1,7 +1,8 @@
 package com.todoList.entities;
 
-import com.todoList.entities.enums.TokenType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -14,18 +15,18 @@ import lombok.*;
 public class Token {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     public Integer id;
 
+    @NotNull
     @Column(unique = true, length = 1000)
     public String token;
 
-    @Enumerated(EnumType.STRING)
-    public TokenType tokenType = TokenType.BEARER;
-
+    @NotNull
     @ManyToOne(
             cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
             fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     public User user;
 }

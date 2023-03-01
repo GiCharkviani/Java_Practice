@@ -5,5 +5,5 @@ import com.todoList.entities.Image;
 public interface ImageService {
     Image get(int id);
     Image uploadImage(Image image);
-    void remove(int id);
+    void delete(int id);
 }

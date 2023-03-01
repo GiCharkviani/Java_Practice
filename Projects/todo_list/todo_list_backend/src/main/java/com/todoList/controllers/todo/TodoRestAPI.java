@@ -1,10 +1,10 @@
 package com.todoList.controllers.todo;
 
-import com.todoList.services.jwt.JwtService;
+import com.todoList.controllers.todo.helpers.TodoRequest;
+import com.todoList.controllers.todo.helpers.TodoStatusRequest;
 import com.todoList.entities.Todo;
 import com.todoList.services.todo.TodoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +15,6 @@ import java.util.List;
 public class TodoRestAPI {
 
     private final TodoService todoService;
-    private final JwtService jwtService;
 
     @GetMapping
     List<Todo> getTodos(
@@ -27,32 +26,28 @@ public class TodoRestAPI {
 
     @GetMapping("/{todoId}")
     ResponseEntity<?> getTodo(@PathVariable int todoId) {
-        Todo tempTodo = todoService.findById(todoId);
-        if(tempTodo == null)
-            return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(tempTodo);
+        return ResponseEntity.ok(todoService.get(todoId));
     }
 
     @PostMapping
-    public Todo saveTodo(@RequestBody Todo todo) throws Exception {
+    public Todo saveTodo(@RequestBody TodoRequest todo) {
         return todoService.save(todo);
     }
 
     @PutMapping
     public ResponseEntity<Todo> updateTodo(@RequestBody Todo todo) {
-        Todo updatedTodo = todoService.update(todo);
-        if(updatedTodo == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).build();
-        }
-        return ResponseEntity.ok(updatedTodo);
+        return ResponseEntity.ok(todoService.update(todo));
     }
+
+    @PatchMapping
+    public ResponseEntity<?> updateTodoStatus(@RequestBody TodoStatusRequest todoStatusRequest) {
+        todoService.updateStatus(todoStatusRequest.getId(), todoStatusRequest.getStatus());
+        return ResponseEntity.ok().build();
+    }
+
 
     @DeleteMapping("/{todoId}")
     ResponseEntity<?> deleteTodo(@PathVariable int todoId) {
-        Todo tempTodo = todoService.findById(todoId);
-        if(tempTodo == null)
-            return ResponseEntity.notFound().build();
-        todoService.deleteById(todoId);
-        return ResponseEntity.ok(tempTodo);
+        return ResponseEntity.ok(todoService.delete(todoId));
     }
 }

@@ -1,7 +1,7 @@
 package com.todoList.configuration;
 
-import com.todoList.dao.user.UserDAO;
 import com.todoList.entities.User;
+import com.todoList.services.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +23,8 @@ import java.util.List;
 
 /**
  * @TODO
+ * 4. User delete route
+ * 5. Todo status route
  * 5. Handle all possible exceptions and send appoperate response
  * 6. Refactor code a bit
  * 9. add Swagger
@@ -32,13 +34,14 @@ import java.util.List;
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
-    private final UserDAO userDAO;
+    private final UserService userService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService());
-        provider.setPasswordEncoder(bCryptPasswordEncoder());
+        provider.setPasswordEncoder(bCryptPasswordEncoder);
         return provider;
     }
 
@@ -50,18 +53,16 @@ public class ApplicationConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return email -> {
-            User user = userDAO.getByEmail(email);
+            User user;
 
-            if(user == null)
+            try {
+                user = userService.getByEmail(email);
+            } catch (Exception e) {
                 throw new UsernameNotFoundException("Invalid email or password");
+            }
 
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), Collections.emptyList());
         };
-    }
-
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -73,7 +74,7 @@ public class ApplicationConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(List.of("*"));
-        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
         corsConfiguration.setAllowedHeaders(List.of("authorization", "content-type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

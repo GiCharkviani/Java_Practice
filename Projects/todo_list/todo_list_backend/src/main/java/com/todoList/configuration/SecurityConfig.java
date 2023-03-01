@@ -2,8 +2,8 @@ package com.todoList.configuration;
 
 import com.todoList.AOP.customHandlers.CustomAccessDeniedHandler;
 import com.todoList.AOP.customHandlers.CustomAuthenticationEntryPoint;
-import com.todoList.filters.JwtAuthFilter;
 import com.todoList.AOP.customHandlers.LogoutService;
+import com.todoList.filters.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

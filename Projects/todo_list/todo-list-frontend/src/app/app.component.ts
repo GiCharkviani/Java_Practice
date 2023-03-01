@@ -27,7 +27,8 @@ export class AppComponent {
   })
 
   public userEditForm = this.formBuilder.group({
-    firstname: ['',],
+    id: [],
+    firstname: [''],
     lastname: [''],
     email: [''],
     password: [''],
@@ -38,7 +39,9 @@ export class AppComponent {
     id: [null],
     whatTodo: [],
     whenTodo: [],
-    isCompleted: [true]
+    createdAt: [],
+    lastModified: [],
+    status: ['TO_DO']
   })
 
   public userInfo: any = {};
@@ -81,9 +84,15 @@ export class AppComponent {
     });
   }
 
-  public editTodo(id: number) {
-    this.http.put('http://localhost:8080/api/todo', {id, whatTodo: 'Edited', whenTodo: new Date()}).subscribe(data => {
+  public editTodo(todo: any ) {
+    this.http.put('http://localhost:8080/api/todo', {...todo, whatTodo: 'Edited'}).subscribe(data => {
       console.log(data, 'DOTO EDITED')
+    });
+  }
+
+  public updateStatus(id: number, status: string) {
+    this.http.patch('http://localhost:8080/api/todo', {id, status}).subscribe(data => {
+      console.log(data, 'TODO STATUS UPDATED')
     });
   }
 
@@ -115,6 +124,7 @@ export class AppComponent {
 
     if(this.editing) {
       this.userEditForm.patchValue({
+        id: this.userInfo.id,
         firstname: this.userInfo.firstname,
         lastname: this.userInfo.lastname,
         email: this.userInfo.email,
@@ -126,6 +136,13 @@ export class AppComponent {
     this.http.post('http://localhost:8080/auth/logout', {}).subscribe((data) => {
       localStorage.removeItem('authToken');
       console.log('LOG OUT')
+    })
+  }
+
+  public deleteUser(): void {
+    this.http.delete('http://localhost:8080/user').subscribe((data) => {
+      localStorage.removeItem('authToken');
+      console.log('USER DELETED')
     })
   }
 }
