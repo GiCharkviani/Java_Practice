@@ -1,9 +1,11 @@
 package com.todoList.controllers.todo;
 
-import com.todoList.controllers.todo.helpers.TodoRequest;
-import com.todoList.controllers.todo.helpers.TodoStatusRequest;
+import com.todoList.controllers.todo.DTOs.TodoAddRequestDTO;
+import com.todoList.controllers.todo.DTOs.TodoEditRequestDTO;
+import com.todoList.controllers.todo.DTOs.TodoStatusUpdateRequestDTO;
 import com.todoList.entities.Todo;
 import com.todoList.services.todo.TodoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,22 +27,22 @@ public class TodoRestAPI {
     }
 
     @GetMapping("/{todoId}")
-    ResponseEntity<?> getTodo(@PathVariable long todoId) {
+    ResponseEntity<Todo> getTodo(@PathVariable long todoId) {
         return ResponseEntity.ok(todoService.get(todoId));
     }
 
     @PostMapping
-    public Todo saveTodo(@RequestBody TodoRequest todo) {
+    public Todo saveTodo(@Valid @RequestBody TodoAddRequestDTO todo) {
         return todoService.save(todo);
     }
 
     @PutMapping
-    public ResponseEntity<Todo> updateTodo(@RequestBody Todo todo) {
+    public ResponseEntity<Todo> updateTodo(@RequestBody TodoEditRequestDTO todo) {
         return ResponseEntity.ok(todoService.update(todo));
     }
 
     @PatchMapping
-    public ResponseEntity<?> updateTodoStatus(@RequestBody TodoStatusRequest todoStatusRequest) {
+    public ResponseEntity<?> updateTodoStatus(@RequestBody TodoStatusUpdateRequestDTO todoStatusRequest) {
         todoService.updateStatus(todoStatusRequest.getId(), todoStatusRequest.getStatus());
         return ResponseEntity.ok().build();
     }

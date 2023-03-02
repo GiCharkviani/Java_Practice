@@ -1,7 +1,9 @@
 package com.todoList.services.user;
 
+import com.todoList.AOP.Exceptions.ExceptionObjects.DuplicatedEmailException;
+import com.todoList.AOP.Exceptions.ExceptionObjects.NotFoundException;
 import com.todoList.AOP.Exceptions.ExceptionObjects.UnauthorizedNotFoundException;
-import com.todoList.controllers.user.helpers.UserRequest;
+import com.todoList.controllers.user.DTOs.UserEditRequestDTO;
 import com.todoList.dao.user.UserDAO;
 import com.todoList.entities.Todo;
 import com.todoList.entities.Token;
@@ -15,6 +17,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -28,6 +31,8 @@ public class UserServiceImpl implements UserService {
     private final ImageService imageService;
     private final TodoService todoService;
     private final TokenService tokenService;
+    private final BCryptPasswordEncoder passwordEncoder;
+
 
     @Override
     @Transactional
@@ -55,10 +60,32 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User update(UserRequest userRequest) throws Exception {
-        User updatedUser = userDAO.update(userRequest);
-        imageService.delete(updatedUser.getId());
-        imageService.uploadImage(Base64Util.imageEntity(userRequest.getImage(), updatedUser));
+    public User update(UserEditRequestDTO userRequest) throws NotFoundException {
+        boolean userExists = userDAO.checkIfEmailExists(userRequest.getEmail());
+
+        if(userExists)
+            throw new DuplicatedEmailException(userRequest.getEmail());
+
+        User user = getById(userRequest.getId());
+
+        if(userRequest.getFirstname() != null && !userRequest.getFirstname().isEmpty())
+            user.setFirstname(userRequest.getFirstname());
+
+        if(userRequest.getLastname() != null && !userRequest.getLastname().isEmpty())
+            user.setLastname(userRequest.getLastname());
+
+        if(userRequest.getEmail() != null && !userRequest.getEmail().isEmpty())
+            user.setEmail(userRequest.getEmail());
+
+        if(userRequest.getPassword() != null && !userRequest.getPassword().isEmpty())
+            user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+
+        User updatedUser = userDAO.save(user);
+
+        if(userRequest.getImage() != null) {
+            imageService.delete(updatedUser.getId());
+            imageService.uploadImage(Base64Util.imageEntity(userRequest.getImage(), updatedUser));
+        }
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                 updatedUser,
@@ -73,7 +100,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void delete() throws Exception {
+    public void delete() throws NotFoundException, UnauthorizedNotFoundException {
         long userId = AuthenticatedUser.user().getId();
         List<Todo> todos = todoService.getAll();
         List<Token> tokens = tokenService.getAll();
@@ -86,7 +113,6 @@ public class UserServiceImpl implements UserService {
         }
 
         imageService.delete(userId);
-
         userDAO.delete(userId);
     }
 }

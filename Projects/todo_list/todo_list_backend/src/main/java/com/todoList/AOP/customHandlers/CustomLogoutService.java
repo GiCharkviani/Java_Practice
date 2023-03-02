@@ -1,9 +1,8 @@
 package com.todoList.AOP.customHandlers;
 
 
-import com.todoList.AOP.customHandlers.responseObjects.CustomBaseResponse;
+import com.todoList.AOP.customHandlers.utils.CustomJsonResponseWriter;
 import com.todoList.services.token.TokenService;
-import com.todoList.utils.ClassToJsonUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +17,7 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
-public class LogoutService extends SimpleUrlLogoutSuccessHandler {
+public class CustomLogoutService extends SimpleUrlLogoutSuccessHandler {
     private final TokenService tokenService;
 
     @Override
@@ -29,7 +28,7 @@ public class LogoutService extends SimpleUrlLogoutSuccessHandler {
         try {
             readyJwt = jwtWithBearer.substring(7);
         } catch (StringIndexOutOfBoundsException exception) {
-            customBaseResponse(response, "Invalid token", 498);
+            CustomJsonResponseWriter.write(response, "Invalid token", 498);
             return;
         }
 
@@ -37,7 +36,7 @@ public class LogoutService extends SimpleUrlLogoutSuccessHandler {
             try {
                 this.tokenService.delete(readyJwt);
             } catch (Exception e) {
-                customBaseResponse(response, "Token was not found", HttpStatus.UNAUTHORIZED.value());
+                CustomJsonResponseWriter.write(response, "Token was not found", HttpStatus.UNAUTHORIZED.value());
             }
         }
 
@@ -45,15 +44,4 @@ public class LogoutService extends SimpleUrlLogoutSuccessHandler {
         super.onLogoutSuccess(request, response, authentication);
     }
 
-    private void customBaseResponse(HttpServletResponse response, String text, int status) throws IOException {
-        CustomBaseResponse customBaseResponse = CustomBaseResponse
-                .builder()
-                .message(text)
-                .status(status)
-                .build();
-
-        response.setContentType("application/json");
-        response.setStatus(status);
-        response.getWriter().write(ClassToJsonUtil.toJson(customBaseResponse));
-    }
 }

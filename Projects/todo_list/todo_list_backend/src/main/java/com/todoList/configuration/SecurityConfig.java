@@ -2,7 +2,7 @@ package com.todoList.configuration;
 
 import com.todoList.AOP.customHandlers.CustomAccessDeniedHandler;
 import com.todoList.AOP.customHandlers.CustomAuthenticationEntryPoint;
-import com.todoList.AOP.customHandlers.LogoutService;
+import com.todoList.AOP.customHandlers.CustomLogoutService;
 import com.todoList.filters.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
-    private final LogoutService LogoutService;
+    private final CustomLogoutService LogoutService;
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 

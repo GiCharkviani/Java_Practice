@@ -3,7 +3,6 @@ package com.todoList.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.todoList.enums.todo.Status;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,22 +21,22 @@ public class Todo
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
-    @NotNull
-    @Column(length = 5000)
+
+    @Column(length = 5000, nullable = false)
     private String whatTodo;
-    @NotNull
+    @Column(nullable = false)
     private LocalDateTime whenTodo;
-    @NotNull
+    @Column(nullable = false)
     private LocalDateTime createdAt;
-    @NotNull
+    @Column(nullable = false)
     private LocalDateTime lastModifiedAt;
 
-    @NotNull
-    @Column(columnDefinition = "VARCHAR(12) CHECK (status IN ('TO_DO', 'IN_PROGRESS', 'CANCELLED', 'DONE') )")
+
+    @Column(nullable = false,
+            columnDefinition = "VARCHAR(12) CHECK (status IN ('TO_DO', 'IN_PROGRESS', 'CANCELLED', 'DONE') )")
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @NotNull
     @ManyToOne(
             cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
             fetch = FetchType.LAZY)

@@ -1,5 +1,6 @@
 package com.todoList.filters;
 
+import com.todoList.AOP.customHandlers.utils.CustomJsonResponseWriter;
 import com.todoList.entities.Token;
 import com.todoList.entities.User;
 import com.todoList.services.token.TokenService;
@@ -41,7 +42,7 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
         final String userId;
         final Token foundToken;
 
-        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if(authHeader == null || !authHeader.startsWith("Bearer")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -50,6 +51,10 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
            jwt = authHeader.substring(7);
            userId = JwtUtil.extractUserId(jwt);
            foundToken = tokenService.getByToken(jwt);
+       }
+       catch (StringIndexOutOfBoundsException e) {
+           CustomJsonResponseWriter.write(response, "Invalid token", 498);
+           return;
        }
        catch (Exception e) {
            System.out.println("Error while filtering: " + e.getMessage());

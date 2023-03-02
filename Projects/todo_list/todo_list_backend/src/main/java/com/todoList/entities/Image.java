@@ -1,7 +1,6 @@
 package com.todoList.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,21 +17,19 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
-    @NotNull
+    @Column(nullable = false)
     private String name;
-    @NotNull
+    @Column(nullable = false)
     private String type;
 
     @MapsId
-    @NotNull
     @OneToOne(
             cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
             fetch = FetchType.LAZY)
     private User user;
 
     @Lob
-    @NotNull
-    @Column(length = 1000)
+    @Column(length = 1000, nullable = false)
     private byte[] image;
 
 }

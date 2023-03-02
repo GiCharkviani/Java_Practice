@@ -2,7 +2,6 @@ package com.todoList.dao.todo;
 
 import com.todoList.AOP.Exceptions.ExceptionObjects.NotFoundException;
 import com.todoList.entities.Todo;
-import com.todoList.enums.todo.Status;
 import com.todoList.utils.AuthenticatedUser;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -11,9 +10,6 @@ import jakarta.persistence.Query;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
 @Repository
@@ -52,30 +48,7 @@ public class TodoDAOImpl implements TodoDAO {
 
     @Override
     public Todo save(Todo todo) {
-        todo.setUser(AuthenticatedUser.user());
         return entityManager.merge(todo);
-    }
-
-    @Override
-    public Todo update(Todo todo) throws NotFoundException {
-        Todo tempTodo = get(todo.getId());
-
-        LocalDateTime localDateTime = LocalDateTime.
-                ofInstant(Instant.ofEpochMilli(System.currentTimeMillis()), ZoneId.systemDefault());
-
-        tempTodo.setWhatTodo(todo.getWhatTodo());
-        tempTodo.setWhenTodo(todo.getWhenTodo());
-        tempTodo.setStatus(todo.getStatus());
-        tempTodo.setLastModifiedAt(localDateTime);
-
-        return save(tempTodo);
-    }
-
-    @Override
-    public void updateStatus(long id, Status status) {
-        Todo tempTodo = get(id);
-        tempTodo.setStatus(status);
-        save(tempTodo);
     }
 
 

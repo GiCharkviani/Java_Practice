@@ -1,5 +1,7 @@
-package com.todoList.controllers.auth.helpers;
+package com.todoList.controllers.auth.DTOs;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,10 +11,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
-    private String firstname;
-    private String lastname;
+public class LoginRequestDTO {
+    @Email
+    @NotBlank
     private String email;
+
+    @NotBlank
     private String password;
-    private ImageBase64 image;
 }

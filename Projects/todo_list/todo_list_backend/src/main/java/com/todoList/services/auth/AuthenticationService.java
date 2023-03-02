@@ -1,9 +1,11 @@
 package com.todoList.services.auth;
 
 import com.todoList.AOP.Exceptions.ExceptionObjects.DuplicatedEmailException;
-import com.todoList.controllers.auth.helpers.AuthenticationRequest;
-import com.todoList.controllers.auth.helpers.AuthenticationResponse;
-import com.todoList.controllers.auth.helpers.RegisterRequest;
+import com.todoList.AOP.Exceptions.ExceptionObjects.UnauthorizedNotFoundException;
+import com.todoList.controllers.auth.DTOs.AuthenticationResponseDTO;
+import com.todoList.controllers.auth.DTOs.ImageBase64DTO;
+import com.todoList.controllers.auth.DTOs.LoginRequestDTO;
+import com.todoList.controllers.auth.DTOs.RegisterRequestDTO;
 import com.todoList.entities.Token;
 import com.todoList.entities.User;
 import com.todoList.services.image.ImageService;
@@ -12,7 +14,6 @@ import com.todoList.services.user.UserService;
 import com.todoList.utils.Base64Util;
 import com.todoList.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,7 @@ public class AuthenticationService {
     private final BCryptPasswordEncoder passwordEncoder;
 
 
-    public AuthenticationResponse register(RegisterRequest request) throws Exception {
+    public AuthenticationResponseDTO register(RegisterRequestDTO request) throws Exception {
         boolean userExists = userService.checkIfExists(request.getEmail());
 
         if(userExists)
@@ -44,25 +45,29 @@ public class AuthenticationService {
         final User savedUser = userService.save(user);
         final String jwtToken = generateToken(savedUser);
         saveUserToken(savedUser, jwtToken);
-        imageService.uploadImage(Base64Util.imageEntity(request.getImage(), savedUser));
 
-        return AuthenticationResponse
+        ImageBase64DTO imageBase64 = request.getImage();
+
+        if(imageBase64 != null)
+            imageService.uploadImage(Base64Util.imageEntity(imageBase64, savedUser));
+
+        return AuthenticationResponseDTO
                 .builder()
                 .token(jwtToken)
                 .build();
     }
 
-    public AuthenticationResponse login(AuthenticationRequest request) throws Exception {
+    public AuthenticationResponseDTO login(LoginRequestDTO request) throws Exception {
         final User user = userService.getByEmail(request.getEmail());
 
         if(!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new UsernameNotFoundException("Invalid email or password");
+            throw new UnauthorizedNotFoundException("Invalid email or password");
         }
 
         final String jwtToken = generateToken(user);
         saveUserToken(user, jwtToken);
 
-        return AuthenticationResponse
+        return AuthenticationResponseDTO
                 .builder()
                 .token(jwtToken)
                 .build();

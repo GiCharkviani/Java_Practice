@@ -1,6 +1,6 @@
 package com.todoList.utils;
 
-import com.todoList.controllers.auth.helpers.ImageBase64;
+import com.todoList.controllers.auth.DTOs.ImageBase64DTO;
 import com.todoList.entities.Image;
 import com.todoList.entities.User;
 import jakarta.validation.constraints.NotNull;
@@ -20,7 +20,7 @@ public class Base64Util {
         return Base64.getDecoder().decode(readyBase64File);
     }
 
-    public static Image imageEntity(ImageBase64 imageBase64, User user) {
+    public static Image imageEntity(ImageBase64DTO imageBase64, User user) {
         byte[] imageBytes = decode(imageBase64.getImage());
         return Image.builder()
                 .name(imageBase64.getName())

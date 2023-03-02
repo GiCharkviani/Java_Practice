@@ -1,8 +1,8 @@
 package com.todoList.controllers.user;
 
-import com.todoList.controllers.user.helpers.UserRequest;
-import com.todoList.controllers.user.helpers.UserResponse;
-import com.todoList.controllers.user.helpers.UserResponseBuilder;
+import com.todoList.controllers.user.DTOs.UserEditRequestDTO;
+import com.todoList.controllers.user.DTOs.UserResponseDTO;
+import com.todoList.controllers.user.builders.UserResponseBuilder;
 import com.todoList.services.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class UserRestAPI {
     }
 
     @PutMapping
-    public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest user) throws Exception {
+    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody UserEditRequestDTO user) {
         return ResponseEntity.ok(userResponseBuilder.build(userService.update(user)));
     }
 

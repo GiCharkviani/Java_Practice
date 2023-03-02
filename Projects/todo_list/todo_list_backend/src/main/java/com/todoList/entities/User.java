@@ -1,7 +1,6 @@
 package com.todoList.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.List;
@@ -18,14 +17,12 @@ public class User  {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
-    @NotNull
+    @Column(nullable = false)
     private String firstname;
-    @NotNull
+    @Column(nullable = false)
     private String lastname;
-    @NotNull
+    @Column(nullable = false)
     private String password;
-
-    @NotNull
     @Column(unique = true, nullable = false, length = 1000)
     private String email;
 

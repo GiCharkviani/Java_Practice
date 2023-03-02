@@ -2,7 +2,6 @@ package com.todoList.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -17,11 +16,10 @@ public class Token {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     public long id;
-    @NotNull
-    @Column(unique = true, length = 1000)
+
+    @Column(unique = true, length = 1000, nullable = false)
     public String token;
 
-    @NotNull
     @ManyToOne(
             cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
             fetch = FetchType.LAZY)

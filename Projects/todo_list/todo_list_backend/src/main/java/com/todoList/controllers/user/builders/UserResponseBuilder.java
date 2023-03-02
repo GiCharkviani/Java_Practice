@@ -1,6 +1,7 @@
-package com.todoList.controllers.user.helpers;
+package com.todoList.controllers.user.builders;
 
-import com.todoList.controllers.auth.helpers.ImageBase64;
+import com.todoList.controllers.auth.DTOs.ImageBase64DTO;
+import com.todoList.controllers.user.DTOs.UserResponseDTO;
 import com.todoList.entities.Image;
 import com.todoList.entities.User;
 import com.todoList.services.image.ImageService;
@@ -14,30 +15,31 @@ import org.springframework.stereotype.Component;
 public class UserResponseBuilder {
     private final ImageService imageService;
 
-    public UserResponse build(User user) {
+    public UserResponseDTO build(User user) {
         return actualBuilder(user);
     }
 
-    public UserResponse build() {
+    public UserResponseDTO build() {
         return actualBuilder(AuthenticatedUser.user());
     }
 
-    private UserResponse actualBuilder(User user) {
+    private UserResponseDTO actualBuilder(User user) {
         Image image = imageService.get(user.getId());
 
-        return UserResponse
+        ImageBase64DTO imageBase64DTO = image == null ? null : ImageBase64DTO.builder()
+                .image(Base64Util.encode(image.getImage()))
+                .name(image.getName())
+                .type(image.getType())
+                .build();
+
+
+        return UserResponseDTO
                 .builder()
                 .id(user.getId())
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .email(user.getEmail())
-                .image(
-                        ImageBase64.builder()
-                                .image(Base64Util.encode(image.getImage()))
-                                .name(image.getName())
-                                .type(image.getType())
-                                .build()
-                )
+                .image(imageBase64DTO)
                 .build();
     }
 }

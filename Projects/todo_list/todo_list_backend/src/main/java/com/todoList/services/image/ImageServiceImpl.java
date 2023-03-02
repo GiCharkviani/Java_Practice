@@ -1,5 +1,6 @@
 package com.todoList.services.image;
 
+import com.todoList.AOP.Exceptions.ExceptionObjects.NotFoundException;
 import com.todoList.dao.image.ImageDAO;
 import com.todoList.entities.Image;
 import jakarta.transaction.Transactional;
@@ -14,7 +15,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     @Transactional
-    public Image get(long id) {
+    public Image get(long id) throws NotFoundException {
         return imageDAO.get(id);
     }
 
@@ -26,7 +27,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     @Transactional
-    public void delete(long id) {
+    public void delete(long id) throws NotFoundException {
         imageDAO.delete(id);
     }
 }
