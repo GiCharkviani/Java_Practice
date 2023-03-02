@@ -2,7 +2,7 @@ package com.todoList.services.todo;
 
 import com.todoList.controllers.todo.DTOs.TodoAddRequestDTO;
 import com.todoList.controllers.todo.DTOs.TodoEditRequestDTO;
-import com.todoList.dao.todo.TodoDAO;
+import com.todoList.daos.todo.TodoDAO;
 import com.todoList.entities.Todo;
 import com.todoList.enums.todo.Status;
 import com.todoList.utils.AuthenticatedUser;

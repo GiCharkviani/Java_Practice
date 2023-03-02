@@ -1,4 +1,4 @@
-package com.todoList.dao.todo;
+package com.todoList.daos.todo;
 
 import com.todoList.AOP.Exceptions.ExceptionObjects.NotFoundException;
 import com.todoList.entities.Todo;

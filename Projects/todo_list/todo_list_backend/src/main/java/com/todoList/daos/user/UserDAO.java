@@ -1,4 +1,4 @@
-package com.todoList.dao.user;
+package com.todoList.daos.user;
 
 import com.todoList.AOP.Exceptions.ExceptionObjects.NotFoundException;
 import com.todoList.AOP.Exceptions.ExceptionObjects.UnauthorizedNotFoundException;

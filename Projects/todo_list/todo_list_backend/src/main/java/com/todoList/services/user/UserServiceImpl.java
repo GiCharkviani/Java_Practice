@@ -4,7 +4,7 @@ import com.todoList.AOP.Exceptions.ExceptionObjects.DuplicatedEmailException;
 import com.todoList.AOP.Exceptions.ExceptionObjects.NotFoundException;
 import com.todoList.AOP.Exceptions.ExceptionObjects.UnauthorizedNotFoundException;
 import com.todoList.controllers.user.DTOs.UserEditRequestDTO;
-import com.todoList.dao.user.UserDAO;
+import com.todoList.daos.user.UserDAO;
 import com.todoList.entities.Todo;
 import com.todoList.entities.Token;
 import com.todoList.entities.User;

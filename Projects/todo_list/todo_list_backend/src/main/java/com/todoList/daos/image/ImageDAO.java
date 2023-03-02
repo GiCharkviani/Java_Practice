@@ -1,4 +1,4 @@
-package com.todoList.dao.image;
+package com.todoList.daos.image;
 
 import com.todoList.AOP.Exceptions.ExceptionObjects.NotFoundException;
 import com.todoList.entities.Image;

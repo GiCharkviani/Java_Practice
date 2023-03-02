@@ -1,4 +1,4 @@
-package com.todoList.dao.token;
+package com.todoList.daos.token;
 
 import com.todoList.AOP.Exceptions.ExceptionObjects.UnauthorizedNotFoundException;
 import com.todoList.entities.Token;

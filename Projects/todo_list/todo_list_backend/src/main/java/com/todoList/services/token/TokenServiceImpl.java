@@ -1,7 +1,7 @@
 package com.todoList.services.token;
 
 import com.todoList.AOP.Exceptions.ExceptionObjects.UnauthorizedNotFoundException;
-import com.todoList.dao.token.TokenDAO;
+import com.todoList.daos.token.TokenDAO;
 import com.todoList.entities.Token;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.todoList.services.image;
 
 import com.todoList.AOP.Exceptions.ExceptionObjects.NotFoundException;
-import com.todoList.dao.image.ImageDAO;
+import com.todoList.daos.image.ImageDAO;
 import com.todoList.entities.Image;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
