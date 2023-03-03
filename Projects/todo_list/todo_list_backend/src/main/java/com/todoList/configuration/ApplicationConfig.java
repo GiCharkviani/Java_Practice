@@ -24,6 +24,7 @@ import java.util.List;
 /**
  * @TODO
  * 1. Check transaction join and bulk delete
+ * 2. Investigate further error responses
  * 10. add email and other checks, that there is used right format
  * 5. Handle all possible exceptions and send appoperate response
  * 6. Refactor code a bit
