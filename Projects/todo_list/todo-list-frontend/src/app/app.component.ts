@@ -59,7 +59,7 @@ export class AppComponent {
 
   public register(editing = false) {
     if (editing) {
-      this.http.put('http://localhost:8080/user', this.userEditForm.getRawValue()).subscribe((data: any) => {
+      this.http.put('http://localhost:8080/api/user', this.userEditForm.getRawValue()).subscribe((data: any) => {
         console.log(data, 'EDITED')
       })
     } else {
@@ -113,7 +113,7 @@ export class AppComponent {
   }
 
   public userData(): void {
-     this.http.get('http://localhost:8080/user').pipe(tap((data: any) => {
+     this.http.get('http://localhost:8080/api/user').pipe(tap((data: any) => {
        this.userInfo = data
        console.log(data, 'USER DATA')
      })).subscribe()
@@ -140,7 +140,7 @@ export class AppComponent {
   }
 
   public deleteUser(): void {
-    this.http.delete('http://localhost:8080/user').subscribe((data) => {
+    this.http.delete('http://localhost:8080/api/user').subscribe((data) => {
       localStorage.removeItem('authToken');
       console.log('USER DELETED')
     })

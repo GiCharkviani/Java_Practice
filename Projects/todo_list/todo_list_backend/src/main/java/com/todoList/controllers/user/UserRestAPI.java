@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 @RestController
 public class UserRestAPI {

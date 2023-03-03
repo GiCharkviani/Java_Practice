@@ -24,6 +24,17 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
+    private static final String[] AUTH_WHITE_LIST = {
+            "/**",
+            "/auth/register",
+            "/auth/login",
+            "/authenticate",
+            "/swagger-resources/**",
+            "/swagger-ui/**",
+            "/v3/api-docs",
+            "/webjars/**"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -32,7 +43,7 @@ public class SecurityConfig {
             .csrf()
             .disable()
             .authorizeHttpRequests()
-            .requestMatchers("/auth/register", "/auth/login")
+            .requestMatchers(AUTH_WHITE_LIST)
             .permitAll()
             .anyRequest()
             .authenticated()
