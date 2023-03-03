@@ -58,7 +58,7 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
        }
        catch (Exception e) {
            System.out.println("Error while filtering: " + e.getMessage());
-           filterChain.doFilter(request, response);
+           CustomJsonResponseWriter.write(response, "Unauthorized", 401);
            return;
        }
 

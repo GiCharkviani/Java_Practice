@@ -41,7 +41,7 @@ public class CustomLogoutService extends SimpleUrlLogoutSuccessHandler {
         }
 
         SecurityContextHolder.clearContext();
-        super.onLogoutSuccess(request, response, authentication);
+        CustomJsonResponseWriter.write(response, "Logged out successfully", HttpStatus.OK.value());
     }
 
 }

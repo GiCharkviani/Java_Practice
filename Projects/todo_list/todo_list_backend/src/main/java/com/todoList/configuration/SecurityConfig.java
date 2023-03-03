@@ -25,13 +25,13 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     private static final String[] AUTH_WHITE_LIST = {
-            "/**",
+            "/*",
             "/auth/register",
             "/auth/login",
             "/authenticate",
             "/swagger-resources/**",
             "/swagger-ui/**",
-            "/v3/api-docs",
+            "/v3/api-docs/**",
             "/webjars/**"
     };
 

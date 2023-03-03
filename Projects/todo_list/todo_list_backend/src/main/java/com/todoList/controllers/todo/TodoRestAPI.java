@@ -5,6 +5,7 @@ import com.todoList.controllers.todo.DTOs.TodoEditRequestDTO;
 import com.todoList.controllers.todo.DTOs.TodoStatusUpdateRequestDTO;
 import com.todoList.entities.Todo;
 import com.todoList.services.todo.TodoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/todo")
+@SecurityRequirement(name = "Bearer Authentication")
 public class TodoRestAPI {
 
     private final TodoService todoService;
