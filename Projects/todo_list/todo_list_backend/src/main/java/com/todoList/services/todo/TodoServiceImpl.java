@@ -29,6 +29,7 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
+    @Transactional
     public List<Todo> getAll() {
         return todoDAO.getAll();
     }
