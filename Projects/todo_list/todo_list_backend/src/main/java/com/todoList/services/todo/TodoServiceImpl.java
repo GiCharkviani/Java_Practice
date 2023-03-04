@@ -4,6 +4,8 @@ import com.todoList.controllers.todo.DTOs.TodoAddRequestDTO;
 import com.todoList.controllers.todo.DTOs.TodoEditRequestDTO;
 import com.todoList.daos.todo.TodoDAO;
 import com.todoList.entities.Todo;
+import com.todoList.enums.todo.OrderBy;
+import com.todoList.enums.todo.SortBy;
 import com.todoList.enums.todo.Status;
 import com.todoList.utils.AuthenticatedUser;
 import jakarta.transaction.Transactional;
@@ -24,9 +26,10 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     @Transactional
-    public List<Todo> getAllLimited(int from, int to) {
-        return todoDAO.getAllLimited(from, to);
+    public List<Todo> getAllLimited(String todo, int from, int to, SortBy sortBy, OrderBy orderBy) {
+        return todoDAO.getAllLimited(todo, from, to, sortBy, orderBy);
     }
+
 
     @Override
     @Transactional

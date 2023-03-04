@@ -4,6 +4,8 @@ import com.todoList.controllers.todo.DTOs.TodoAddRequestDTO;
 import com.todoList.controllers.todo.DTOs.TodoEditRequestDTO;
 import com.todoList.controllers.todo.DTOs.TodoStatusUpdateRequestDTO;
 import com.todoList.entities.Todo;
+import com.todoList.enums.todo.OrderBy;
+import com.todoList.enums.todo.SortBy;
 import com.todoList.services.todo.TodoService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -22,10 +24,13 @@ public class TodoRestAPI {
 
     @GetMapping
     List<Todo> getTodos(
+            @RequestParam(value = "todo", required = false, defaultValue = "") String todo,
             @RequestParam(value = "from", required = false, defaultValue = "1") int from,
-            @RequestParam(value = "to", required = false, defaultValue = "10") int to
-    ) {
-        return todoService.getAllLimited(from, to);
+            @RequestParam(value = "to", required = false, defaultValue = "10") int to,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "createdAt") SortBy sortBy,
+            @RequestParam(value = "orderBy", required = false, defaultValue = "asc") OrderBy orderBy
+            ) {
+        return todoService.getAllLimited(todo, from, to, sortBy, orderBy);
     }
 
     @GetMapping("/{todoId}")

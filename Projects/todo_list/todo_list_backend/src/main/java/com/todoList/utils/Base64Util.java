@@ -6,8 +6,11 @@ import com.todoList.entities.User;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Base64;
+import java.util.regex.Pattern;
 
 public class Base64Util {
+    public static final Pattern BASE_64_IMAGE_PATTERN =
+            Pattern.compile("^data:image/([a-zA-Z]*);base64,([\\\\S]*)$");
     public static String encode(byte[] file) {
         return Base64.getEncoder().encodeToString(ImageUtil.decompressImage(file));
     }

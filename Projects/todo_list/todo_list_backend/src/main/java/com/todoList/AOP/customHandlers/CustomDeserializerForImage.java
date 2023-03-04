@@ -1,19 +1,22 @@
 package com.todoList.AOP.customHandlers;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.todoList.controllers.auth.DTOs.ImageBase64DTO;
+import com.todoList.utils.Base64Util;
 
 import java.io.IOException;
 
 public class CustomDeserializerForImage extends JsonDeserializer<ImageBase64DTO> {
     @Override
-    public ImageBase64DTO deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
+    public ImageBase64DTO deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+            throws IOException {
        JsonNode jsonNode = jsonParser.getCodec().readTree(jsonParser);
-       if(jsonNode.isEmpty())
+       boolean isBase64Image = Base64Util.BASE_64_IMAGE_PATTERN.matcher(jsonNode.get("image").textValue()).matches();
+
+       if(jsonNode.isEmpty() || !isBase64Image)
            return null;
        return ImageBase64DTO
                .builder()
