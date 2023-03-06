@@ -1,8 +1,11 @@
 package com.todoList.controllers.todo.DTOs;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.todoList.AOP.customHandlers.Deserializers.DateDeserializer;
+import com.todoList.enums.todo.Priority;
 import com.todoList.enums.todo.Status;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -21,13 +24,17 @@ public class TodoEditRequestDTO {
     @Positive
     private int id;
 
-    @NotBlank
+    @Nullable
     private String whatTodo;
 
-    @NotNull
+    @Nullable
     @FutureOrPresent
+    @JsonDeserialize(using = DateDeserializer.class)
     private LocalDateTime whenTodo;
 
-    @NotNull
+    @Nullable
     private Status status;
+
+    @Nullable
+    private Priority priority;
 }

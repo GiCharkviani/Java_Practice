@@ -2,9 +2,11 @@ package com.todoList.services.todo;
 
 import com.todoList.controllers.todo.DTOs.TodoAddRequestDTO;
 import com.todoList.controllers.todo.DTOs.TodoEditRequestDTO;
+import com.todoList.controllers.todo.DTOs.TodoResponseDTO;
 import com.todoList.daos.todo.TodoDAO;
 import com.todoList.entities.Todo;
 import com.todoList.enums.todo.OrderBy;
+import com.todoList.enums.todo.Priority;
 import com.todoList.enums.todo.SortBy;
 import com.todoList.enums.todo.Status;
 import com.todoList.utils.AuthenticatedUser;
@@ -26,8 +28,15 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     @Transactional
-    public List<Todo> getAllLimited(String todo, int from, int to, SortBy sortBy, OrderBy orderBy) {
-        return todoDAO.getAllLimited(todo, from, to, sortBy, orderBy);
+    public TodoResponseDTO getAllLimited(String todo, int from, int to, SortBy sortBy, OrderBy orderBy) {
+        List<Todo> todos = todoDAO.getAllLimited(todo, from, to, sortBy, orderBy);
+        long totalCount = todoDAO.getTotalCount();
+
+        return TodoResponseDTO
+                .builder()
+                .totalCount(totalCount)
+                .todos(todos)
+                .build();
     }
 
 
@@ -54,6 +63,7 @@ public class TodoServiceImpl implements TodoService {
                 .whatTodo(todoRequest.getWhatTodo())
                 .whenTodo(todoRequest.getWhenTodo())
                 .status(todoRequest.getStatus())
+                .priority(todoRequest.getPriority())
                 .user(AuthenticatedUser.user())
                 .createdAt(localDateTime)
                 .lastModifiedAt(localDateTime)
@@ -70,9 +80,13 @@ public class TodoServiceImpl implements TodoService {
         LocalDateTime localDateTime = LocalDateTime.
                 ofInstant(Instant.ofEpochMilli(System.currentTimeMillis()), ZoneId.systemDefault());
 
-        tempTodo.setWhatTodo(todo.getWhatTodo());
-        tempTodo.setWhenTodo(todo.getWhenTodo());
-        tempTodo.setStatus(todo.getStatus());
+        if(todo.getWhatTodo() != null && !todo.getWhatTodo().isEmpty())
+            tempTodo.setWhatTodo(todo.getWhatTodo());
+        if(todo.getWhenTodo() != null && !todo.getWhenTodo().toString().isEmpty())
+            tempTodo.setWhenTodo(todo.getWhenTodo());
+        if(todo.getStatus() != null && !todo.getStatus().toString().isEmpty())
+            tempTodo.setStatus(todo.getStatus());
+
         tempTodo.setLastModifiedAt(localDateTime);
 
         return todoDAO.save(tempTodo);
@@ -83,6 +97,14 @@ public class TodoServiceImpl implements TodoService {
     public void updateStatus(long id, Status status) {
         Todo tempTodo = get(id);
         tempTodo.setStatus(status);
+        todoDAO.save(tempTodo);
+    }
+
+    @Override
+    @Transactional
+    public void updatePriority(long id, Priority priority) {
+        Todo tempTodo = get(id);
+        tempTodo.setPriority(priority);
         todoDAO.save(tempTodo);
     }
 

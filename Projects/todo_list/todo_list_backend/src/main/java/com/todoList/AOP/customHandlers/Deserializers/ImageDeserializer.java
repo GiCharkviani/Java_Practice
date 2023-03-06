@@ -1,4 +1,4 @@
-package com.todoList.AOP.customHandlers;
+package com.todoList.AOP.customHandlers.Deserializers;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -9,7 +9,7 @@ import com.todoList.utils.Base64Util;
 
 import java.io.IOException;
 
-public class CustomDeserializerForImage extends JsonDeserializer<ImageBase64DTO> {
+public class ImageDeserializer extends JsonDeserializer<ImageBase64DTO> {
     @Override
     public ImageBase64DTO deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
             throws IOException {

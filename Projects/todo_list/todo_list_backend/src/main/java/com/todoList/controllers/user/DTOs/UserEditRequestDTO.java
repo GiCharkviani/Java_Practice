@@ -1,7 +1,7 @@
 package com.todoList.controllers.user.DTOs;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.todoList.AOP.customHandlers.CustomDeserializerForImage;
+import com.todoList.AOP.customHandlers.Deserializers.ImageDeserializer;
 import com.todoList.controllers.auth.DTOs.ImageBase64DTO;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Email;
@@ -34,6 +34,6 @@ public class UserEditRequestDTO {
     @Nullable
     private String password;
 
-    @JsonDeserialize(using = CustomDeserializerForImage.class)
+    @JsonDeserialize(using = ImageDeserializer.class)
     private ImageBase64DTO image;
 }

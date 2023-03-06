@@ -1,6 +1,7 @@
 package com.todoList.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.todoList.enums.todo.Priority;
 import com.todoList.enums.todo.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,11 @@ public class Todo
             columnDefinition = "VARCHAR(12) CHECK (status IN ('TO_DO', 'IN_PROGRESS', 'CANCELLED', 'DONE') )")
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @Column(nullable = false,
+            columnDefinition = "VARCHAR(12) CHECK (priority IN ('HIGH', 'MEDIUM', 'LOW') )")
+    @Enumerated(EnumType.STRING)
+    private Priority priority;
 
     @ManyToOne(
             cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},

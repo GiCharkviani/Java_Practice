@@ -51,6 +51,13 @@ public class TodoDAOImpl implements TodoDAO {
     }
 
     @Override
+    public long getTotalCount() {
+        return entityManager.createQuery("SELECT COUNT(t) FROM Todo t WHERE t.user =: user", Long.class)
+                .setParameter("user", AuthenticatedUser.user())
+                .getSingleResult();
+    }
+
+    @Override
     public Todo get(long id) throws NotFoundException {
         Query theQuery = entityManager.createQuery("FROM Todo WHERE user=:user AND id=:todoId")
                 .setParameter("user", AuthenticatedUser.user())
