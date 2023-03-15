@@ -6,9 +6,7 @@ import com.todoList.controllers.todo.DTOs.TodoQueryParamDTO;
 import com.todoList.controllers.todo.DTOs.TodoResponseDTO;
 import com.todoList.daos.todo.TodoDAO;
 import com.todoList.entities.Todo;
-import com.todoList.enums.todo.Order;
 import com.todoList.enums.todo.Priority;
-import com.todoList.enums.todo.SortBy;
 import com.todoList.enums.todo.Status;
 import com.todoList.utils.AuthenticatedUser;
 import jakarta.transaction.Transactional;
@@ -56,7 +54,7 @@ public class TodoServiceImpl implements TodoService {
     @Override
     @Transactional
     public Todo save(TodoAddRequestDTO todoRequest) {
-        LocalDateTime localDateTime = LocalDateTime.
+        LocalDateTime currentDateTime = LocalDateTime.
                 ofInstant(Instant.ofEpochMilli(System.currentTimeMillis()), ZoneId.systemDefault());
 
         Todo todo = Todo
@@ -66,8 +64,8 @@ public class TodoServiceImpl implements TodoService {
                 .status(todoRequest.getStatus())
                 .priority(todoRequest.getPriority())
                 .user(AuthenticatedUser.user())
-                .createdAt(localDateTime)
-                .lastModifiedAt(localDateTime)
+                .createdAt(currentDateTime)
+                .lastModifiedAt(currentDateTime)
                 .build();
 
         return todoDAO.save(todo);
@@ -78,7 +76,7 @@ public class TodoServiceImpl implements TodoService {
     public Todo update(TodoEditRequestDTO todo) {
         Todo tempTodo = get(todo.getId());
 
-        LocalDateTime localDateTime = LocalDateTime.
+        LocalDateTime currentDateTime = LocalDateTime.
                 ofInstant(Instant.ofEpochMilli(System.currentTimeMillis()), ZoneId.systemDefault());
 
         if(todo.getWhatTodo() != null && !todo.getWhatTodo().isEmpty())
@@ -88,7 +86,7 @@ public class TodoServiceImpl implements TodoService {
         if(todo.getStatus() != null && !todo.getStatus().toString().isEmpty())
             tempTodo.setStatus(todo.getStatus());
 
-        tempTodo.setLastModifiedAt(localDateTime);
+        tempTodo.setLastModifiedAt(currentDateTime);
 
         return todoDAO.save(tempTodo);
     }
