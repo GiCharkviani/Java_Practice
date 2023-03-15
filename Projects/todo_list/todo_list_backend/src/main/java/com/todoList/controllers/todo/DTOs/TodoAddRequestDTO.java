@@ -1,5 +1,7 @@
 package com.todoList.controllers.todo.DTOs;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.todoList.AOP.customHandlers.deserializers.DateDeserializer;
 import com.todoList.enums.todo.Priority;
 import com.todoList.enums.todo.Status;
 import jakarta.validation.constraints.FutureOrPresent;
@@ -22,6 +24,7 @@ public class TodoAddRequestDTO {
 
     @NotNull
     @FutureOrPresent
+    @JsonDeserialize(using = DateDeserializer.class)
     private LocalDateTime whenTodo;
 
     @NotNull

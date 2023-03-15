@@ -2,14 +2,17 @@ package com.todoList.controllers.todo;
 
 import com.todoList.controllers.todo.DTOs.*;
 import com.todoList.entities.Todo;
-import com.todoList.enums.todo.OrderBy;
+import com.todoList.enums.todo.Order;
+import com.todoList.enums.todo.Priority;
 import com.todoList.enums.todo.SortBy;
+import com.todoList.enums.todo.Status;
 import com.todoList.services.todo.TodoService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/todo")
@@ -20,13 +23,22 @@ public class TodoRestAPI {
 
     @GetMapping
     TodoResponseDTO getTodos(
-            @RequestParam(value = "todo", required = false, defaultValue = "") String todo,
-            @RequestParam(value = "from", required = false, defaultValue = "1") int from,
-            @RequestParam(value = "to", required = false, defaultValue = "10") int to,
-            @RequestParam(value = "sortBy", required = false, defaultValue = "createdAt") SortBy sortBy,
-            @RequestParam(value = "orderBy", required = false, defaultValue = "asc") OrderBy orderBy
+            @RequestParam(value = "from", defaultValue = "1") int from,
+            @RequestParam(value = "to", defaultValue = "10") int to,
+            @RequestParam(value = "todo", required = false) String todo,
+            @RequestParam(value = "status", required = false) Status status,
+            @RequestParam(value = "priority", required = false) Priority priority,
+            @RequestParam(value = "sortBy", required = false) SortBy sortBy,
+            @RequestParam(value = "order", required = false) Order order
             ) {
-        return todoService.getAllLimited(todo, from, to, sortBy, orderBy);
+        TodoQueryParamDTO todoQueryParamDTO = TodoQueryParamDTO
+                .builder()
+                .to(to).from(from).todo(todo)
+                .status(status).priority(priority)
+                .sortBy(sortBy).order(order)
+                .build();
+
+        return todoService.getAllLimited(todoQueryParamDTO);
     }
 
     @GetMapping("/{todoId}")

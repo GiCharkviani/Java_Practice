@@ -1,7 +1,7 @@
 package com.todoList.controllers.user.DTOs;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.todoList.AOP.customHandlers.Deserializers.ImageDeserializer;
+import com.todoList.AOP.customHandlers.deserializers.ImageDeserializer;
 import com.todoList.controllers.auth.DTOs.ImageBase64DTO;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Email;

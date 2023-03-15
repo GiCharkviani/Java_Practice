@@ -1,4 +1,4 @@
-package com.todoList.AOP.customHandlers.Deserializers;
+package com.todoList.AOP.customHandlers.deserializers;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;

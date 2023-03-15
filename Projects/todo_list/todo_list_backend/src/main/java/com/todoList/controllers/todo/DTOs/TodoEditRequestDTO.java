@@ -1,7 +1,7 @@
 package com.todoList.controllers.todo.DTOs;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.todoList.AOP.customHandlers.Deserializers.DateDeserializer;
+import com.todoList.AOP.customHandlers.deserializers.DateDeserializer;
 import com.todoList.enums.todo.Priority;
 import com.todoList.enums.todo.Status;
 import jakarta.annotation.Nullable;
