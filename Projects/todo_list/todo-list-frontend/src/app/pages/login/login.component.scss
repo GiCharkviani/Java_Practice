@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,300;0,400;0,600;0,700;1,100&display=swap');
+
+.main-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Josefin Sans', sans-serif;
+
+  .login-form {
+    border-radius: .5em;
+    width: 30em;
+    height: 30em;
+    box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    h1 {
+      border-bottom: .03em solid grey;
+      text-align: center;
+      padding-bottom: 1em;
+      margin-bottom: 2em;
+      width: 100%;
+    }
+
+    input:not(:last-child) {
+      margin-bottom: 1.7em;
+    }
+
+    input {
+      height: 3em;
+      width: 70%;
+      padding: .5em;
+      border: none;
+      border-bottom: .12em solid grey;
+      font-family: inherit;
+      font-size: 1.2em;
+      &:focus {
+        outline: none;
+        border-bottom-color: #168AAD;
+      }
+    }
+
+    button {
+      width: 30%;
+      height: 3em;
+      font-size: 1em;
+      background-color: #1A759F;
+      color: white;
+      border: none;
+      border-radius: .2em;
+      &:hover {
+        cursor: pointer;
+        background-color: #168AAD;
+      }
+      &:disabled {
+        background-color: grey;
+      }
+    }
+
+    .signup {
+      margin-top: 2em;
+      a {
+        color: #1E6091;
+        text-decoration: none;
+        &:hover {
+          cursor: pointer;
+          color: #1A759F;
+        }
+      }
+    }
+  }
+}

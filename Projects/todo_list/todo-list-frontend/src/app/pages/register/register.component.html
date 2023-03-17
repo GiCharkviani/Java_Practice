@@ -1,0 +1,13 @@
+<main class="main-container">
+    <form class="register-form" [formGroup]="registrationForm">
+        <h1>Signup</h1>
+        <input formControlName="email" class="email-input" placeholder="Email" type="text" autocomplete="off">
+        <input formControlName="password" class="password" placeholder="Password" type="password" autocomplete="off">
+        <input formControlName="firstname" class="firstname" placeholder="First name" type="text" autocomplete="off">
+        <input formControlName="lastname" class="lastname" placeholder="Last name" type="text" autocomplete="off">
+        <input (change)="imageSelected($event)" class="image" accept="image/*" type="file" autocomplete="off">
+
+        <button type="button" (click)="register()">Register</button>
+        <p class="signup">Already member? <a routerLink="/login" >Login</a></p>
+    </form>
+</main>

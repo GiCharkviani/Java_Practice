@@ -1,0 +1,9 @@
+<main class="main-container">
+    <form class="login-form" [formGroup]="loginForm">
+        <h1>Login</h1>
+        <input formControlName="email" class="email" placeholder="Email" type="text" autocomplete="off">
+        <input formControlName="password" class="password" placeholder="Password" type="password" autocomplete="off">
+        <button [disabled]="loginForm.invalid" type="button" (click)="login()">Login</button>
+        <p class="signup">Not a member? <a routerLink="/register" >Signup</a></p>
+    </form>
+</main>
