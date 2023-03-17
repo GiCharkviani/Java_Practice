@@ -2,15 +2,15 @@ import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {RouterModule} from "@angular/router";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {UserService} from "../../services/user/user.service";
-import {ImageUser} from "../../services/user/interfaces/image-user";
 import {RegisterUser} from "../../services/user/interfaces/register-user";
 import {Subscription} from "rxjs";
+import {DropImageDirective} from "../../directives/dropImage.directive";
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
-  imports: [RouterModule, ReactiveFormsModule],
+  imports: [RouterModule, ReactiveFormsModule, DropImageDirective],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -32,8 +32,9 @@ export class RegisterComponent implements OnDestroy {
   constructor(private readonly fb: FormBuilder, private readonly userService: UserService) { }
 
   public register(): void {
-    this.subscription = this.userService.register(this.registrationForm.getRawValue() as RegisterUser)
-        .subscribe()
+    console.log(this.registrationForm.getRawValue())
+    // this.subscription = this.userService.register(this.registrationForm.getRawValue() as RegisterUser)
+    //     .subscribe()
   }
 
   public imageSelected(data: Event): void {

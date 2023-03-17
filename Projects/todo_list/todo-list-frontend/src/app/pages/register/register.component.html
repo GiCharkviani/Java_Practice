@@ -5,9 +5,15 @@
         <input formControlName="password" class="password" placeholder="Password" type="password" autocomplete="off">
         <input formControlName="firstname" class="firstname" placeholder="First name" type="text" autocomplete="off">
         <input formControlName="lastname" class="lastname" placeholder="Last name" type="text" autocomplete="off">
-        <input (change)="imageSelected($event)" class="image" accept="image/*" type="file" autocomplete="off">
 
-        <button type="button" (click)="register()">Register</button>
+        <label for="image" class="image" dropImage >
+            <p #labelParagraph>Select or Drop an Image here</p>
+            <input #imageInput (change)="imageSelected($event)" id="image" value="Choose an image"
+                    accept="image/*" type="file" autocomplete="off">
+            <i #icon class="fa-regular fa-image"></i>
+        </label>
+
+        <button [disabled]="registrationForm.invalid" type="button" (click)="register()">Submit</button>
         <p class="signup">Already member? <a routerLink="/login" >Login</a></p>
     </form>
 </main>
