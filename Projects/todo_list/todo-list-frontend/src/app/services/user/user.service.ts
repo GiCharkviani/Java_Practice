@@ -6,7 +6,6 @@ import {TokenResponse} from "./interfaces/token-response";
 import {HttpService} from "../http/http.service";
 import {LoginUser} from "./interfaces/login-user";
 import {RegisterUser} from "./interfaces/register-user";
-import {Token} from "@angular/compiler";
 
 @Injectable({providedIn: 'root'})
 export class UserService {
@@ -45,7 +44,8 @@ export class UserService {
     }
 
     public get JWT(): string | null {
-        return localStorage.getItem(this.JWT_NAME);
+        const jwt = localStorage.getItem(this.JWT_NAME);
+        return  jwt ? JSON.parse(jwt) : null;
     }
 
     private isSessionExpired(exp: number | undefined) {
