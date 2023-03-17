@@ -41,7 +41,8 @@ export class AppComponent {
     whenTodo: [],
     createdAt: [],
     lastModified: [],
-    status: ['TO_DO']
+    status: ['TO_DO'],
+    priority: ['HIGH']
   })
 
   public userInfo: any = {};

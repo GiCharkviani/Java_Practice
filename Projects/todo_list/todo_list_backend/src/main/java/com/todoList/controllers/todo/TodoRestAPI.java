@@ -68,7 +68,6 @@ public class TodoRestAPI {
         return ResponseEntity.ok().build();
     }
 
-
     @DeleteMapping("/{todoId}")
     ResponseEntity<?> deleteTodo(@PathVariable long todoId) {
         return ResponseEntity.ok(todoService.delete(todoId));

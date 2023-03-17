@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class Base64Util {
     public static final Pattern BASE_64_IMAGE_PATTERN =
-            Pattern.compile("^data:image/([a-zA-Z]*);base64,([\\\\S]*)$");
+            Pattern.compile("data:image\\/([a-zA-Z]*);base64,([^\\\"]*)");
     public static String encode(byte[] file) {
         return Base64.getEncoder().encodeToString(ImageUtil.decompressImage(file));
     }
