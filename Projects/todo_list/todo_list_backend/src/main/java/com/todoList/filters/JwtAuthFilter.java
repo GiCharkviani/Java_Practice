@@ -26,10 +26,8 @@ import java.util.Collections;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
-
     private final UserService userService;
     private final TokenService tokenService;
-
 
     @Override
     protected void doFilterInternal(

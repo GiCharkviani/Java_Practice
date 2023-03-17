@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserRestAPI {
     private final UserService userService;
 
-
     private final UserResponseBuilder userResponseBuilder;
 
     @GetMapping
