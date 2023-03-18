@@ -1,9 +1,16 @@
 <main class="main-container">
+    <ng-container *ngIf="errorMessages && errorMessages.length">
+        <div class="error-box">
+            <p *ngFor="let errorMessage of errorMessages">{{errorMessage}}</p>
+        </div>
+    </ng-container>
     <form class="login-form" [formGroup]="loginForm">
         <h1>Login</h1>
-        <input formControlName="email" class="email" placeholder="Email" type="text" autocomplete="off">
-        <input formControlName="password" class="password" placeholder="Password" type="password" autocomplete="off">
-        <button [disabled]="loginForm.invalid" type="button" (click)="login()">Login</button>
+        <section class="inputs">
+            <input formControlName="email" class="email" placeholder="Email" type="text" autocomplete="off">
+            <input formControlName="password" class="password" placeholder="Password" type="password" autocomplete="off">
+        </section>
+        <button [disabled]="loading || loginForm.invalid"  type="button" (click)="login()">Login</button>
         <p class="signup">Not a member? <a routerLink="/register" >Signup</a></p>
     </form>
 </main>

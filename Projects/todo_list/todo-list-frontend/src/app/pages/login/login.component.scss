@@ -11,22 +11,40 @@
   background-repeat: no-repeat;
   background-size: cover;
 
+  .error-box {
+    position: absolute;
+    top: 3em;
+    width: 25em;
+    word-wrap: break-word;
+    background-color: #FF595E;
+    padding: .8em;
+    border-radius: .3em;
+    color: white;
+    p:not(:last-of-type) {
+      margin-bottom: .7em;
+    }
+    p {
+      text-align: center;
+    }
+  }
+
   .login-form {
     border-radius: .5em;
     width: 30em;
-    height: 30em;
+    height: 35em;
     box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
     background-color: white;
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     flex-direction: column;
 
     h1 {
       border-bottom: .03em solid grey;
       text-align: center;
+      align-self: flex-start;
       padding-bottom: 1em;
-      margin-bottom: 2em;
+      margin-bottom: 1em;
       width: 100%;
     }
 
@@ -34,19 +52,28 @@
       margin-bottom: 1.7em;
     }
 
-    input {
-      height: 3em;
-      width: 70%;
-      padding: .5em;
-      border: none;
-      border-bottom: .12em solid grey;
-      font-family: inherit;
-      font-size: 1.2em;
-      &:focus {
-        outline: none;
-        border-bottom-color: #168AAD;
+    .inputs {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      input {
+        height: 3em;
+        width: 70%;
+        padding: .5em;
+        border: none;
+        border-bottom: .12em solid grey;
+        font-family: inherit;
+        font-size: 1.2em;
+        &:focus {
+          outline: none;
+          border-bottom-color: #168AAD;
+        }
       }
     }
+
+
 
     button {
       width: 30%;

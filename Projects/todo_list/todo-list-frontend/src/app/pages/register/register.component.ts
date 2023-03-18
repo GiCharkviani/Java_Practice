@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {RouterModule} from "@angular/router";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {UserService} from "../../services/user/user.service";
-import {RegisterUser} from "../../services/user/interfaces/register-user";
 import {Subscription} from "rxjs";
 import {DropImageDirective} from "../../directives/dropImage.directive";
 

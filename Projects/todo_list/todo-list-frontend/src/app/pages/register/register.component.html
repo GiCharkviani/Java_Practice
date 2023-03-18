@@ -7,13 +7,13 @@
         <input formControlName="lastname" class="lastname" placeholder="Last name" type="text" autocomplete="off">
 
         <label for="image" class="image" dropImage >
-            <p #labelParagraph>Select or Drop an Image here</p>
+            <p #labelParagraph>Select or drop your profile picture here</p>
             <input #imageInput (change)="imageSelected($event)" id="image" value="Choose an image"
                     accept="image/*" type="file" autocomplete="off">
             <i #icon class="fa-regular fa-image"></i>
         </label>
 
-        <button [disabled]="registrationForm.invalid" type="button" (click)="register()">Submit</button>
+        <button  type="button" (click)="register()">Submit</button>
         <p class="signup">Already member? <a routerLink="/login" >Login</a></p>
     </form>
 </main>

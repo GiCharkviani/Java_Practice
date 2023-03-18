@@ -23,7 +23,7 @@ public class ValidationExceptionHandler {
 
         List<String> errors = new ArrayList<>();
         methodArgumentNotValidException.getBindingResult().getFieldErrors().forEach(error ->
-                errors.add(error.getField() + ": the value " + "'" + error.getRejectedValue() + "'" + " -> " + error.getDefaultMessage()));
+                errors.add("The " + error.getField()  + " value " + error.getDefaultMessage()));
         responseBody.put("messages", errors);
 
         return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
