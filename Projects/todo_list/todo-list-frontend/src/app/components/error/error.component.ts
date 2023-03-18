@@ -3,7 +3,8 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  Input,
+  Input, OnChanges, SimpleChange,
+  SimpleChanges,
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
@@ -26,13 +27,15 @@ import {CommonModule} from "@angular/common";
       border-radius: .3em;
       color: white;
       margin: 0 auto;
+
       p:not(:last-of-type) {
         margin-bottom: .7em;
       }
+
       p {
         text-align: center;
       }
-      
+
       .close {
         float: right;
         color: #184E77;
@@ -40,6 +43,7 @@ import {CommonModule} from "@angular/common";
         top: .1em;
         right: .3em;
         font-size: 1.5em;
+
         &:hover {
           color: white;
           cursor: pointer;
@@ -51,9 +55,16 @@ import {CommonModule} from "@angular/common";
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ErrorComponent {
+export class ErrorComponent implements OnChanges {
+
   @Input() errorMessages: string[] = [];
   @ViewChild('errorContainer') errorContainer!: ElementRef;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(this.errorContainer) {
+      this.errorContainer.nativeElement.style.display = 'block';
+    }
+  }
 
   public close() {
     this.errorContainer.nativeElement.style.display = 'none';
