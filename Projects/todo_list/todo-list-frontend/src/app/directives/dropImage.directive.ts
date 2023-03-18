@@ -12,9 +12,28 @@ export class DropImageDirective {
     constructor(private readonly elementRef: ElementRef) {
     }
 
+    @HostListener('document:dragover', ['$event'])
+    onDocumentDragOver(event: DragEvent) {
+        event.preventDefault();
+        this.setDragOverStyles()
+    }
+
+    @HostListener('document:drop', ['$event'])
+    onDocumentDrop(event: DragEvent) {
+        event.preventDefault();
+        this.setSelectedStyles();
+    }
+
+    @HostListener('document:dragleave', ['$event'])
+    onDocumentDragLeave(event: DragEvent) {
+        event.preventDefault();
+        this.setDefaultStyles();
+    }
+
     @HostListener('dragover', ['$event'])
     onDragOver(event: DragEvent) {
         event.preventDefault();
+        this.setDragOverStyles();
     }
 
     @HostListener('drop', ['$event'])
@@ -47,6 +66,24 @@ export class DropImageDirective {
         imgElement.dispatchEvent(new Event('change'));
     }
 
+    private setDragOverStyles(): void {
+        const labelElement = this.labelParagraph.nativeElement;
+        const dragOverColor = '#168AAD';
+        labelElement.innerText = 'Drop Here';
+        labelElement.style.color = dragOverColor;
+        this.elementRef.nativeElement.style.borderColor = dragOverColor;
+        this.icon.nativeElement.style.color = dragOverColor;
+    }
+
+    private setDefaultStyles(): void {
+        const labelElement = this.labelParagraph.nativeElement;
+        const defaultColor = 'black';
+        labelElement.innerText = 'Select or drop your profile picture here';
+        labelElement.style.color = defaultColor;
+        this.elementRef.nativeElement.style.borderColor = defaultColor;
+        this.icon.nativeElement.style.color = defaultColor;
+    }
+
     private setSelectedStyles(): void {
         const files = this.imageInput.nativeElement.files;
         const pElement = this.labelParagraph.nativeElement;
@@ -56,7 +93,8 @@ export class DropImageDirective {
             pElement.style.color = successColor;
             this.icon.nativeElement.style.color = successColor;
             this.elementRef.nativeElement.style.borderColor = successColor;
-        }
+        } else
+            this.setDefaultStyles();
     }
 
     private displayError(errorMsg: string) {
