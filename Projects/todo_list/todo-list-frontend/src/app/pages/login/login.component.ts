@@ -5,12 +5,13 @@ import {UserService} from "../../services/user/user.service";
 import {catchError, Subscription} from "rxjs";
 import {CommonModule} from "@angular/common";
 import {HttpErrorResponse} from "@angular/common/http";
+import {ErrorComponent} from "../../components/error/error.component";
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
-    imports: [RouterModule, ReactiveFormsModule, CommonModule],
+    imports: [RouterModule, ReactiveFormsModule, CommonModule, ErrorComponent],
     standalone: true,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -51,15 +52,15 @@ export class LoginComponent implements OnDestroy {
             .subscribe(this.handleSuccess.bind(this))
     }
 
+    ngOnDestroy() {
+        this.subscription?.unsubscribe();
+    }
+
     private handleSuccess(): void {
         this.router.navigate(['']).then(() => {
             this.loginForm.reset();
             this.errorMessages = [];
             this.loading = false;
         });
-    }
-
-    ngOnDestroy() {
-        this.subscription?.unsubscribe();
     }
 }

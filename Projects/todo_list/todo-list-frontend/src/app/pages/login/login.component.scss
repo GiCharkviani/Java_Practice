@@ -11,21 +11,9 @@
   background-repeat: no-repeat;
   background-size: cover;
 
-  .error-box {
+  app-error {
     position: absolute;
-    top: 3em;
-    width: 25em;
-    word-wrap: break-word;
-    background-color: #FF595E;
-    padding: .8em;
-    border-radius: .3em;
-    color: white;
-    p:not(:last-of-type) {
-      margin-bottom: .7em;
-    }
-    p {
-      text-align: center;
-    }
+    top: 4em;
   }
 
   .login-form {
@@ -69,6 +57,9 @@
         &:focus {
           outline: none;
           border-bottom-color: #168AAD;
+        }
+        &.ng-invalid.ng-touched {
+          border-bottom-color: #FF595E;
         }
       }
     }

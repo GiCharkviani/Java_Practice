@@ -1,4 +1,5 @@
 <main class="main-container">
+    <app-error [errorMessages]="errorMessages" ></app-error>
     <form class="register-form" [formGroup]="registrationForm">
         <h1>Signup</h1>
         <input formControlName="email" class="email-input" placeholder="Email" type="text" autocomplete="off">
@@ -13,7 +14,7 @@
             <i #icon class="fa-regular fa-image"></i>
         </label>
 
-        <button  type="button" (click)="register()">Submit</button>
+        <button [disabled]="loading || registrationForm.invalid" type="button" (click)="register()">Submit</button>
         <p class="signup">Already member? <a routerLink="/login" >Login</a></p>
     </form>
 </main>

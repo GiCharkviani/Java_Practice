@@ -1,19 +1,24 @@
-import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
-import {RouterModule} from "@angular/router";
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
+import {Router, RouterModule} from "@angular/router";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {UserService} from "../../services/user/user.service";
-import {Subscription} from "rxjs";
+import {catchError, Subscription} from "rxjs";
 import {DropImageDirective} from "../../directives/dropImage.directive";
+import {RegisterUser} from "../../services/user/interfaces/register-user";
+import {HttpErrorResponse} from "@angular/common/http";
+import {ErrorComponent} from "../../components/error/error.component";
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
-  imports: [RouterModule, ReactiveFormsModule, DropImageDirective],
+  imports: [RouterModule, ReactiveFormsModule, DropImageDirective, ErrorComponent],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterComponent implements OnDestroy {
+  public errorMessages: string[] = [];
+  public loading: boolean = false;
   private subscription!: Subscription;
 
   public readonly registrationForm = this.fb.group({
@@ -28,12 +33,28 @@ export class RegisterComponent implements OnDestroy {
     }),
   })
 
-  constructor(private readonly fb: FormBuilder, private readonly userService: UserService) { }
+  constructor(private readonly fb: FormBuilder,
+              private readonly userService: UserService,
+              private readonly cd: ChangeDetectorRef,
+              private readonly router: Router) { }
 
   public register(): void {
-    console.log(this.registrationForm.getRawValue())
-    // this.subscription = this.userService.register(this.registrationForm.getRawValue() as RegisterUser)
-    //     .subscribe()
+    this.subscription = this.userService.register(this.registrationForm.getRawValue() as RegisterUser)
+        .pipe(
+            catchError((httpErrorResponse: HttpErrorResponse) => {
+              this.cd.markForCheck();
+              const {error} = httpErrorResponse;
+              this.errorMessages = [];
+              httpErrorResponse.status === 400 ?
+                  this.errorMessages.push(...error.messages)
+                  :
+                  this.errorMessages.push(error.message);
+
+              this.loading = false;
+              throw httpErrorResponse;
+            })
+        )
+        .subscribe(this.handleSuccess.bind(this))
   }
 
   public imageSelected(data: Event): void {
@@ -61,5 +82,13 @@ export class RegisterComponent implements OnDestroy {
   ngOnDestroy() {
     this.subscription?.unsubscribe();
   }
+
+    private handleSuccess(): void {
+        this.router.navigate(['']).then(() => {
+            this.registrationForm.reset();
+            this.errorMessages = [];
+            this.loading = false;
+        });
+    }
 
 }
