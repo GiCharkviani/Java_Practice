@@ -23,7 +23,8 @@ export class LoginComponent implements OnDestroy {
   constructor(private readonly fb: FormBuilder, private readonly userService: UserService) { }
 
   public login(): void {
-    this.userService.login(this.loginForm.getRawValue()).subscribe()
+    this.subscription = this.userService.login(this.loginForm.getRawValue())
+        .subscribe()
   }
 
   ngOnDestroy() {

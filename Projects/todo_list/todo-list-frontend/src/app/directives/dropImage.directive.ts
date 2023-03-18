@@ -20,7 +20,19 @@ export class DropImageDirective {
     @HostListener('drop', ['$event'])
     onDrop(dragEvent: DragEvent) {
         dragEvent.preventDefault();
-        this.setSelectedFile(dragEvent)
+        const files = (dragEvent.dataTransfer?.files as FileList);
+        const file = files.item(0);
+
+        if(files.length > 1) {
+            this.displayError("Only one file is allowed");
+            return;
+        }
+        if(file && !file.type.startsWith('image/')) {
+            this.displayError("Only images are allowed");
+            return;
+        }
+
+        this.setSelectedFile(files)
         this.setSelectedStyles();
     }
 
@@ -29,20 +41,31 @@ export class DropImageDirective {
         this.setSelectedStyles()
     }
 
-    private setSelectedFile(dragEvent: DragEvent) {
+    private setSelectedFile(fileList: FileList) {
         const imgElement = this.imageInput.nativeElement;
-        const files = (dragEvent.dataTransfer?.files as FileList);
-        console.log(files)
-        imgElement.files = files;
+        imgElement.files = fileList;
         imgElement.dispatchEvent(new Event('change'));
     }
 
     private setSelectedStyles(): void {
+        const files = this.imageInput.nativeElement.files;
         const pElement = this.labelParagraph.nativeElement;
-        const color = '#168AAD';
-        pElement.innerText = this.imageInput.nativeElement.files[0].name;
-        pElement.style.color = color;
-        this.icon.nativeElement.style.color = color;
-        this.elementRef.nativeElement.style.borderColor = color;
+        const successColor = '#52B69A';
+        if(files.length === 1) {
+            pElement.innerText = files[0].name;
+            pElement.style.color = successColor;
+            this.icon.nativeElement.style.color = successColor;
+            this.elementRef.nativeElement.style.borderColor = successColor;
+        }
+    }
+
+    private displayError(errorMsg: string) {
+        const pElement = this.labelParagraph.nativeElement;
+        const errorColor = '#FF595E';
+        pElement.innerText = errorMsg;
+        pElement.style.color = 'red';
+        this.icon.nativeElement.style.color = errorColor;
+        this.elementRef.nativeElement.style.borderColor = errorColor;
+        setTimeout(() => this.setSelectedStyles(), 1500)
     }
 }
