@@ -50,7 +50,7 @@ export class DropImageDirective {
     private setSelectedStyles(): void {
         const files = this.imageInput.nativeElement.files;
         const pElement = this.labelParagraph.nativeElement;
-        const successColor = '#52B69A';
+        const successColor = '#168AAD';
         if(files.length === 1) {
             pElement.innerText = files[0].name;
             pElement.style.color = successColor;
