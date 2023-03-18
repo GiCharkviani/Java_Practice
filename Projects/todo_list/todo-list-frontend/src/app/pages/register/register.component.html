@@ -8,7 +8,7 @@
         <input formControlName="lastname" class="lastname" placeholder="Last name" type="text" autocomplete="off">
 
         <label for="image" class="image" dropImage >
-            <p #labelParagraph>Select or drop your profile picture here</p>
+            <p #labelParagraph>Select or drop your profile picture</p>
             <input #imageInput (change)="imageSelected($event)" id="image" value="Choose an image"
                     accept="image/*" type="file" autocomplete="off">
             <i #icon class="fa-regular fa-image"></i>

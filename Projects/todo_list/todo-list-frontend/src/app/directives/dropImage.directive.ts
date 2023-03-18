@@ -15,13 +15,13 @@ export class DropImageDirective {
     @HostListener('document:dragover', ['$event'])
     onDocumentDragOver(event: DragEvent) {
         event.preventDefault();
-        this.setDragOverStyles()
+        this.setDragOverStyles();
     }
 
     @HostListener('document:drop', ['$event'])
     onDocumentDrop(event: DragEvent) {
         event.preventDefault();
-        this.setSelectedStyles();
+        this.onDrop(event);
     }
 
     @HostListener('document:dragleave', ['$event'])
@@ -36,8 +36,12 @@ export class DropImageDirective {
         this.setDragOverStyles();
     }
 
-    @HostListener('drop', ['$event'])
-    onDrop(dragEvent: DragEvent) {
+    @HostListener('change', ['$event'])
+    onSelect() {
+        this.setSelectedStyles();
+    }
+
+    private onDrop(dragEvent: DragEvent): void {
         dragEvent.preventDefault();
         const files = (dragEvent.dataTransfer?.files as FileList);
         const file = files.item(0);
@@ -51,13 +55,8 @@ export class DropImageDirective {
             return;
         }
 
-        this.setSelectedFile(files)
+        this.setSelectedFile(files);
         this.setSelectedStyles();
-    }
-
-    @HostListener('change', ['$event'])
-    onSelect() {
-        this.setSelectedStyles()
     }
 
     private setSelectedFile(fileList: FileList) {
@@ -69,7 +68,7 @@ export class DropImageDirective {
     private setDragOverStyles(): void {
         const labelElement = this.labelParagraph.nativeElement;
         const dragOverColor = '#168AAD';
-        labelElement.innerText = 'Drop Here';
+        labelElement.innerText = 'You can drop';
         labelElement.style.color = dragOverColor;
         this.elementRef.nativeElement.style.borderColor = dragOverColor;
         this.icon.nativeElement.style.color = dragOverColor;
@@ -78,7 +77,7 @@ export class DropImageDirective {
     private setDefaultStyles(): void {
         const labelElement = this.labelParagraph.nativeElement;
         const defaultColor = 'black';
-        labelElement.innerText = 'Select or drop your profile picture here';
+        labelElement.innerText = 'Select or drop your profile picture';
         labelElement.style.color = defaultColor;
         this.elementRef.nativeElement.style.borderColor = defaultColor;
         this.icon.nativeElement.style.color = defaultColor;
@@ -104,6 +103,6 @@ export class DropImageDirective {
         pElement.style.color = 'red';
         this.icon.nativeElement.style.color = errorColor;
         this.elementRef.nativeElement.style.borderColor = errorColor;
-        setTimeout(() => this.setSelectedStyles(), 1500)
+        setTimeout(() => this.setSelectedStyles(), 1500);
     }
 }
