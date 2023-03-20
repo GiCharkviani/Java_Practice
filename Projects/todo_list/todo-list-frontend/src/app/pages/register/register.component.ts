@@ -48,8 +48,7 @@ export class RegisterComponent implements OnDestroy {
               httpErrorResponse.status === 400 ?
                   this.errorMessages.push(...error.messages)
                   :
-                  this.errorMessages.push(error.message);
-
+                  this.errorMessages.push(httpErrorResponse.message);
               this.loading = false;
               throw httpErrorResponse;
             })
