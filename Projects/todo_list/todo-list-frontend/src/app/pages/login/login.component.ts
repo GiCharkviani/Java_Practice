@@ -42,8 +42,10 @@ export class LoginComponent implements OnDestroy {
                     this.errorMessages = [];
                     if(httpErrorResponse.status === 500) {
                         this.errorMessages.push(httpErrorResponse.message);
-                    } else
+                    } else if(httpErrorResponse.status === 400)
                         this.errorMessages.push(...error.messages);
+                    else
+                        this.errorMessages.push(error.message);
 
                     this.loading = false;
                     throw httpErrorResponse;
