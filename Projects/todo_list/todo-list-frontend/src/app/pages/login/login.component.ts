@@ -40,10 +40,11 @@ export class LoginComponent implements OnDestroy {
                     this.cd.markForCheck();
                     const {error} = httpErrorResponse;
                     this.errorMessages = [];
-                    httpErrorResponse.status === 400 ?
-                        this.errorMessages.push(...error.messages)
-                        :
+                    if(httpErrorResponse.status === 500) {
                         this.errorMessages.push(httpErrorResponse.message);
+                    } else
+                        this.errorMessages.push(...error.messages);
+
                     this.loading = false;
                     throw httpErrorResponse;
                 })
