@@ -45,7 +45,7 @@ export class RegisterComponent implements OnDestroy {
               this.cd.markForCheck();
               const {error} = httpErrorResponse;
               this.errorMessages = [];
-                if(httpErrorResponse.status === 500) {
+                if(!httpErrorResponse.status) {
                     this.errorMessages.push(httpErrorResponse.message);
                 } else if(httpErrorResponse.status === 400)
                     this.errorMessages.push(...error.messages);
