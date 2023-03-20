@@ -5,6 +5,14 @@ import {ContentChild, Directive, ElementRef, HostListener} from "@angular/core";
     standalone: true
 })
 export class DropImageDirective {
+    private readonly DROP = 'You can drop';
+    private readonly SELECT = 'Select or drop your profile picture';
+    private readonly ONLY_ONE = 'Only one file is allowed';
+    private readonly ONLY_IMAGE = 'Only images are allowed';
+    private readonly SUCCESS_COLOR = '#168AAD';
+    private readonly ERROR_COLOR = '#FF595E';
+    private readonly DEFAULT_C0LOR = 'grey'
+
     @ContentChild('imageInput') imageInput!: ElementRef;
     @ContentChild('labelParagraph') labelParagraph!: ElementRef;
     @ContentChild('icon') icon!: ElementRef;
@@ -13,27 +21,21 @@ export class DropImageDirective {
     }
 
     @HostListener('document:dragover', ['$event'])
-    onDocumentDragOver(event: DragEvent) {
-        event.preventDefault();
+    onDocumentDragOver(dragEvent: DragEvent) {
+        dragEvent.preventDefault();
         this.setDragOverStyles();
     }
 
     @HostListener('document:drop', ['$event'])
-    onDocumentDrop(event: DragEvent) {
-        event.preventDefault();
-        this.onDrop(event);
+    onDocumentDrop(dragEvent: DragEvent) {
+        dragEvent.preventDefault();
+        this.onDrop(dragEvent);
     }
 
     @HostListener('document:dragleave', ['$event'])
-    onDocumentDragLeave(event: DragEvent) {
-        event.preventDefault();
-        this.setDefaultStyles();
-    }
-
-    @HostListener('dragover', ['$event'])
-    onDragOver(event: DragEvent) {
-        event.preventDefault();
-        this.setDragOverStyles();
+    onDocumentDragLeave(dragEvent: DragEvent) {
+        dragEvent.preventDefault();
+        this.setSelectedStyles();
     }
 
     @HostListener('change', ['$event'])
@@ -47,11 +49,11 @@ export class DropImageDirective {
         const file = files.item(0);
 
         if(files.length > 1) {
-            this.displayError("Only one file is allowed");
+            this.displayError(this.ONLY_ONE);
             return;
         }
         if(file && !file.type.startsWith('image/')) {
-            this.displayError("Only images are allowed");
+            this.displayError(this.ONLY_IMAGE);
             return;
         }
 
@@ -66,43 +68,29 @@ export class DropImageDirective {
     }
 
     private setDragOverStyles(): void {
-        const labelElement = this.labelParagraph.nativeElement;
-        const dragOverColor = '#168AAD';
-        labelElement.innerText = 'You can drop';
-        labelElement.style.color = dragOverColor;
-        this.elementRef.nativeElement.style.borderColor = dragOverColor;
-        this.icon.nativeElement.style.color = dragOverColor;
+        this.setStyles(this.DROP,this.SUCCESS_COLOR);
     }
 
     private setDefaultStyles(): void {
-        const labelElement = this.labelParagraph.nativeElement;
-        const defaultColor = 'black';
-        labelElement.innerText = 'Select or drop your profile picture';
-        labelElement.style.color = defaultColor;
-        this.elementRef.nativeElement.style.borderColor = defaultColor;
-        this.icon.nativeElement.style.color = defaultColor;
+        this.setStyles(this.SELECT,this.DEFAULT_C0LOR);
     }
 
     private setSelectedStyles(): void {
         const files = this.imageInput.nativeElement.files;
-        const pElement = this.labelParagraph.nativeElement;
-        const successColor = '#168AAD';
-        if(files.length === 1) {
-            pElement.innerText = files[0].name;
-            pElement.style.color = successColor;
-            this.icon.nativeElement.style.color = successColor;
-            this.elementRef.nativeElement.style.borderColor = successColor;
-        } else
+        files.length === 1 ? this.setStyles(files[0].name, '#168AAD') :
             this.setDefaultStyles();
     }
 
     private displayError(errorMsg: string) {
-        const pElement = this.labelParagraph.nativeElement;
-        const errorColor = '#FF595E';
-        pElement.innerText = errorMsg;
-        pElement.style.color = 'red';
-        this.icon.nativeElement.style.color = errorColor;
-        this.elementRef.nativeElement.style.borderColor = errorColor;
+        this.setStyles(errorMsg, this.ERROR_COLOR);
         setTimeout(() => this.setSelectedStyles(), 1500);
+    }
+
+    private setStyles(text: string, color: string) {
+        const labelElement = this.labelParagraph.nativeElement;
+        labelElement.innerText = text;
+        labelElement.style.color = color;
+        this.elementRef.nativeElement.style.borderColor = color;
+        this.icon.nativeElement.style.color = color;
     }
 }
